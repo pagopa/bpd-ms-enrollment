@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>it.gov.pagopa.bpd.ms</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <artifactId>bpd-ms-starter-parent</artifactId>
+    </parent>
+
+    <artifactId>bpd-ms-enrollment</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.ms.enrollment.integration</groupId>
+                <artifactId>bpd-ms-enrollment-integration-rest</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.ms.enrollment</groupId>
+                <artifactId>bpd-ms-enrollment-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.ms.enrollment.api</groupId>
+                <artifactId>bpd-ms-enrollment-api-rest</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.commons.api</groupId>
+                <artifactId>bpd-commons-api-rest</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.commons</groupId>
+                <artifactId>bpd-commons-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.commons.api</groupId>
+                <artifactId>bpd-commons-api-rest</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>app</module>
+        <module>core</module>
+        <module>integration</module>
+        <module>api</module>
+    </modules>
+</project>

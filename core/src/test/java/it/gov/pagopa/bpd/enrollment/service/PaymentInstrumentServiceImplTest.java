@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,13 +33,14 @@ public class PaymentInstrumentServiceImplTest {
     @PostConstruct
     public void configureMock() {
         BDDMockito.when(restClientMock.update(Mockito.any(String.class), Mockito.any(PaymentInstrumentDTO.class)))
-                .thenAnswer((Answer<PaymentInstrumentResource>) invocation -> {
+                .thenAnswer(invocation -> {
                     final PaymentInstrumentDTO dtoArgument = invocation.getArgument(1, PaymentInstrumentDTO.class);
                     final PaymentInstrumentResource result = new PaymentInstrumentResource();
                     result.setHpan(invocation.getArgument(0));
                     result.setActivationDate(dtoArgument.getActivationDate());
                     result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
                     result.setFiscalCode(FISCAL_CODE);
+
                     return result;
                 });
     }
@@ -48,14 +48,15 @@ public class PaymentInstrumentServiceImplTest {
 
     @Test
     public void update() {
-        final String hashPanValue = "hpan";
+        final String hashPan = "hpan";
         final PaymentInstrumentDTO dto = new PaymentInstrumentDTO();
         dto.setActivationDate(CURRENT_DATE_TIME);
 
-        final PaymentInstrumentResource updated = paymentInstrumentService.update(hashPanValue, dto);
+        final PaymentInstrumentResource updated = paymentInstrumentService.update(hashPan, dto);
 
-        BDDMockito.verify(restClientMock, Mockito.times(1)).update(Mockito.eq(hashPanValue), Mockito.eq(dto));
-        Assert.assertEquals(hashPanValue, updated.getHpan());
+        BDDMockito.verify(restClientMock, Mockito.times(1)).update(Mockito.eq(hashPan), Mockito.eq(dto));
+        BDDMockito.verify(restClientMock, Mockito.only()).update(Mockito.eq(hashPan), Mockito.eq(dto));
+        Assert.assertEquals(hashPan, updated.getHpan());
         Assert.assertEquals(CURRENT_DATE_TIME, updated.getActivationDate());
         Assert.assertEquals(PaymentInstrumentResource.Status.ACTIVE, updated.getStatus());
         Assert.assertEquals(FISCAL_CODE, updated.getFiscalCode());

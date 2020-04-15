@@ -1,7 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.service;
 
 import it.gov.pagopa.bpd.enrollment.connector.citizen.PaymentInstrumentRestClient;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDTO;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,9 +32,9 @@ public class PaymentInstrumentServiceImplTest {
 
     @PostConstruct
     public void configureMock() {
-        BDDMockito.when(restClientMock.update(Mockito.any(String.class), Mockito.any(PaymentInstrumentDTO.class)))
+        BDDMockito.when(restClientMock.update(Mockito.any(String.class), Mockito.any(PaymentInstrumentDto.class)))
                 .thenAnswer(invocation -> {
-                    final PaymentInstrumentDTO dtoArgument = invocation.getArgument(1, PaymentInstrumentDTO.class);
+                    final PaymentInstrumentDto dtoArgument = invocation.getArgument(1, PaymentInstrumentDto.class);
                     final PaymentInstrumentResource result = new PaymentInstrumentResource();
                     result.setHpan(invocation.getArgument(0));
                     result.setActivationDate(dtoArgument.getActivationDate());
@@ -49,7 +49,7 @@ public class PaymentInstrumentServiceImplTest {
     @Test
     public void update() {
         final String hashPan = "hpan";
-        final PaymentInstrumentDTO dto = new PaymentInstrumentDTO();
+        final PaymentInstrumentDto dto = new PaymentInstrumentDto();
         dto.setActivationDate(CURRENT_DATE_TIME);
 
         final PaymentInstrumentResource updated = paymentInstrumentService.update(hashPan, dto);

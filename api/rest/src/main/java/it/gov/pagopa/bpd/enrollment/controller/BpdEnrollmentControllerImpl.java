@@ -1,11 +1,11 @@
-package it.gov.pagopa.bpd.enrollment.api.controller;
+package it.gov.pagopa.bpd.enrollment.controller;
 
 import eu.sia.meda.core.controller.StatelessController;
-import it.gov.pagopa.bpd.enrollment.api.factory.ModelFactory;
-import it.gov.pagopa.bpd.enrollment.api.model.EnrollmentDTO;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDTO;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,23 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnrollmentController {
 
     private final BeanFactory beanFactory;
-    private final ModelFactory<EnrollmentDTO, PaymentInstrumentDTO> paymentInstrumentFactory;
+    private final ModelFactory<EnrollmentDto, PaymentInstrumentDto> paymentInstrumentFactory;
 
 
     @Autowired
     public BpdEnrollmentControllerImpl(BeanFactory beanFactory,
-                                       ModelFactory<EnrollmentDTO, PaymentInstrumentDTO> paymentInstrumentFactory) {
+                                       ModelFactory<EnrollmentDto, PaymentInstrumentDto> paymentInstrumentFactory) {
         this.beanFactory = beanFactory;
         this.paymentInstrumentFactory = paymentInstrumentFactory;
     }
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentDTO request) {
+    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentDto request) {
         logger.info(request.toString());
 
         String fiscalCode = "test";//FIXME: get fiscal code from token
-        final PaymentInstrumentDTO paymentInstrumentDTO = paymentInstrumentFactory.createModel(request);
+        final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.createModel(request);
         paymentInstrumentDTO.setFiscalCode(fiscalCode);
 
         PaymentInstrumentResource result = null;

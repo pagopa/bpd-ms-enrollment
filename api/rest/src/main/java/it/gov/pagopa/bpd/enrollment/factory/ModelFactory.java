@@ -1,4 +1,4 @@
-package it.gov.pagopa.bpd.enrollment.api.factory;
+package it.gov.pagopa.bpd.enrollment.factory;
 
 public interface ModelFactory<T, U> {
 

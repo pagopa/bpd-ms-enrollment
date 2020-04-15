@@ -3,15 +3,13 @@ package it.gov.pagopa.bpd.enrollment.command;
 import eu.sia.meda.async.util.AsyncUtils;
 import eu.sia.meda.core.model.ApplicationContext;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDTO;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {EnrollPaymentInstrumentCommandImpl.class, ApplicationContext.class, AsyncUtils.class})
@@ -41,7 +44,7 @@ public class EnrollCitizenCommandImplTest {
 
     @PostConstruct
     public void configureMock() {
-        BDDMockito.when(citizenService.findById(Mockito.any(String.class)))
+        when(citizenService.findById(any(String.class)))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
@@ -51,9 +54,9 @@ public class EnrollCitizenCommandImplTest {
                     return result;
                 });
 
-        BDDMockito.when(paymentInstrumentService.update(Mockito.any(String.class), Mockito.any(PaymentInstrumentDTO.class)))
+        when(paymentInstrumentService.update(any(String.class), any(PaymentInstrumentDto.class)))
                 .thenAnswer(invocation -> {
-                    final PaymentInstrumentDTO dtoArgument = invocation.getArgument(1, PaymentInstrumentDTO.class);
+                    final PaymentInstrumentDto dtoArgument = invocation.getArgument(1, PaymentInstrumentDto.class);
                     final PaymentInstrumentResource result = new PaymentInstrumentResource();
                     result.setHpan(invocation.getArgument(0));
                     result.setActivationDate(dtoArgument.getActivationDate());
@@ -67,7 +70,7 @@ public class EnrollCitizenCommandImplTest {
 
     @Test
     public void doExecuteOK() {
-        final PaymentInstrumentDTO dto = new PaymentInstrumentDTO();
+        final PaymentInstrumentDto dto = new PaymentInstrumentDto();
         dto.setFiscalCode(FISCAL_CODE);
         dto.setActivationDate(CURRENT_DATE_TIME);
 
@@ -75,20 +78,20 @@ public class EnrollCitizenCommandImplTest {
                 beanFactory.getBean(EnrollPaymentInstrumentCommandImpl.class, HASH_PAN, dto);
         final PaymentInstrumentResource enrolled = enrollPaymentInstrumentCommand.doExecute();
 
-        BDDMockito.verify(citizenService, Mockito.only()).findById(Mockito.eq(dto.getFiscalCode()));
-        BDDMockito.verify(citizenService, Mockito.times(1)).findById(Mockito.eq(dto.getFiscalCode()));
-        BDDMockito.verify(paymentInstrumentService, Mockito.only()).update(Mockito.eq(HASH_PAN), Mockito.eq(dto));
-        BDDMockito.verify(paymentInstrumentService, Mockito.times(1)).update(Mockito.eq(HASH_PAN), Mockito.eq(dto));
-        Assert.assertEquals(HASH_PAN, enrolled.getHpan());
-        Assert.assertEquals(CURRENT_DATE_TIME, enrolled.getActivationDate());
-        Assert.assertEquals(PaymentInstrumentResource.Status.ACTIVE, enrolled.getStatus());
-        Assert.assertEquals(dto.getFiscalCode(), enrolled.getFiscalCode());
+        verify(citizenService, only()).findById(eq(dto.getFiscalCode()));
+        verify(citizenService, times(1)).findById(eq(dto.getFiscalCode()));
+        verify(paymentInstrumentService, only()).update(eq(HASH_PAN), eq(dto));
+        verify(paymentInstrumentService, times(1)).update(eq(HASH_PAN), eq(dto));
+        assertEquals(HASH_PAN, enrolled.getHpan());
+        assertEquals(CURRENT_DATE_TIME, enrolled.getActivationDate());
+        assertEquals(PaymentInstrumentResource.Status.ACTIVE, enrolled.getStatus());
+        assertEquals(dto.getFiscalCode(), enrolled.getFiscalCode());
     }
 
 
     @Test(expected = CitizenNotEnabledException.class)
     public void doExecuteCitizenDisabled() {
-        final PaymentInstrumentDTO dto = new PaymentInstrumentDTO();
+        final PaymentInstrumentDto dto = new PaymentInstrumentDto();
         dto.setFiscalCode("fiscal-code-disabled");
         dto.setActivationDate(CURRENT_DATE_TIME);
 
@@ -99,9 +102,9 @@ public class EnrollCitizenCommandImplTest {
             enrollPaymentInstrumentCommand.doExecute();
 
         } finally {
-            BDDMockito.verify(citizenService, Mockito.only()).findById(Mockito.eq(dto.getFiscalCode()));
-            BDDMockito.verify(citizenService, Mockito.times(1)).findById(Mockito.eq(dto.getFiscalCode()));
-            BDDMockito.verify(paymentInstrumentService, Mockito.never()).update(Mockito.eq(HASH_PAN), Mockito.eq(dto));
+            verify(citizenService, only()).findById(eq(dto.getFiscalCode()));
+            verify(citizenService, times(1)).findById(eq(dto.getFiscalCode()));
+            verify(paymentInstrumentService, Mockito.never()).update(eq(HASH_PAN), eq(dto));
         }
     }
 

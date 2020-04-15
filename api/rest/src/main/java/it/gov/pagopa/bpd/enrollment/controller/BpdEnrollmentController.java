@@ -1,11 +1,13 @@
-package it.gov.pagopa.bpd.enrollment.api.controller;
+package it.gov.pagopa.bpd.enrollment.controller;
 
 import io.swagger.annotations.Api;
-import it.gov.pagopa.bpd.enrollment.api.model.EnrollmentDTO;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Controller to expose MicroService
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/bpd/enrollment")
 public interface BpdEnrollmentController {
 
-    @PostMapping(value = "/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentIO(@PathVariable("id") String hashPan, @RequestBody EnrollmentDTO request);
+    PaymentInstrumentResource enrollPaymentInstrumentIO(@PathVariable("id") String hashPan, @Valid @RequestBody EnrollmentDto request);
 
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.OffsetDateTime;
 
 @Data
-public class PaymentInstrumentDTO {
+public class PaymentInstrumentDto {
 
     private String fiscalCode;
     private OffsetDateTime activationDate;

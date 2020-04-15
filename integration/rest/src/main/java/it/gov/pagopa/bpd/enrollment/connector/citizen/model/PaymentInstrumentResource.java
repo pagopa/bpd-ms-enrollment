@@ -13,7 +13,7 @@ public class PaymentInstrumentResource {
     private String fiscalCode;
     private OffsetDateTime activationDate;
     private OffsetDateTime cancellationDate;
-    private Status Status;
+    private Status status;
 
     public enum Status {
         ACTIVE, INACTIVE

@@ -2,7 +2,7 @@ package it.gov.pagopa.bpd.enrollment.service;
 
 import eu.sia.meda.service.BaseService;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.PaymentInstrumentRestClient;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDTO;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrum
 
 
     @Override
-    public PaymentInstrumentResource update(String hpan, PaymentInstrumentDTO paymentInstrument) {
+    public PaymentInstrumentResource update(String hpan, PaymentInstrumentDto paymentInstrument) {
         return restClient.update(hpan, paymentInstrument);
     }
 

@@ -1,7 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.connector.citizen;
 
 import eu.sia.meda.connector.rest.transformer.response.SimpleRest2xxResponseTransformer;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDTO;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ class PaymentInstrumentRestClientImpl implements PaymentInstrumentRestClient {
 
 
     @Override
-    public PaymentInstrumentResource update(String hashPan, PaymentInstrumentDTO paymentInstrumentDTO) {
+    public PaymentInstrumentResource update(String hashPan, PaymentInstrumentDto paymentInstrumentDTO) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("hashPan", hashPan);
 

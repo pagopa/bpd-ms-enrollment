@@ -2,7 +2,7 @@ package it.gov.pagopa.bpd.enrollment.command;
 
 import eu.sia.meda.core.command.BaseCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDTO;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentResource> implements EnrollPaymentInstrumentCommand {
 
     private final String hashPan;
-    private final PaymentInstrumentDTO paymentInstrumentDTO;
+    private final PaymentInstrumentDto paymentInstrumentDTO;
 
     @Autowired
     private CitizenService citizenService;
@@ -25,7 +25,7 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
     private PaymentInstrumentService paymentInstrumentService;
 
 
-    public EnrollPaymentInstrumentCommandImpl(String hashPan, PaymentInstrumentDTO paymentInstrumentDTO) {
+    public EnrollPaymentInstrumentCommandImpl(String hashPan, PaymentInstrumentDto paymentInstrumentDTO) {
         this.hashPan = hashPan;
         this.paymentInstrumentDTO = paymentInstrumentDTO;
     }

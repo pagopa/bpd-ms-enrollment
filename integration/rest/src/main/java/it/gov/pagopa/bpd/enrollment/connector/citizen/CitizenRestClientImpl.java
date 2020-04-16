@@ -12,6 +12,8 @@ import java.util.HashMap;
 @Service
 class CitizenRestClientImpl extends BaseService implements CitizenRestClient {
 
+    static final String FISCAL_CODE_PARAM_KEY = "fiscalCode";
+
     private final CitizenFindByIdRestConnector connector;
     private final SimpleRestGetRequestTransformer requestTransformer;
     private final SimpleRest2xxResponseTransformer<CitizenResource> responseTransformer;
@@ -28,8 +30,12 @@ class CitizenRestClientImpl extends BaseService implements CitizenRestClient {
 
 
     public CitizenResource findById(String fiscalCode) {
+        if (fiscalCode == null) {
+            throw new IllegalArgumentException("Fiscal Code cannot be null");
+        }
+
         final HashMap<String, Object> params = new HashMap<>();
-        params.put("fiscalCode", fiscalCode);
+        params.put(FISCAL_CODE_PARAM_KEY, fiscalCode);
         return connector.call(null, requestTransformer, responseTransformer, params);
     }
 

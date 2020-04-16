@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "?acqShopId=ACQSHOPID&flagType=P&shopLegalName=SHOPLEGALNAME&acqId=ACQID",
+    "headers": {
+      "x-request-id": {
+        "anything": true
+      }
+    }
+  },
+  "response": {
+    "status": "200",
+    "jsonBody": [
+      {
+        "links": [],
+        "shop": {
+          "shopId": 10004212,
+          "chainId": 123,
+          "status": "A",
+          "shopName": "TAMOIL 4212",
+          "shopLegalName": "TAMOIL 2205",
+          "address": {
+            "shopAddr": "SP. 206 KM. 2+280 SNC",
+            "shopCity": "CASEI GEROLA",
+            "shopDist": "PAVIA",
+            "shopState": "ITALIA",
+            "shopPostalCd": "27050"
+          },
+          "vatReg": "1672470067",
+          "flagCode": true,
+          "flagPos": true,
+          "contractStartDate": "2020-01-23",
+          "suspenStartDate": "2020-01-22T17:41:19.162+01:00",
+          "suspenEndDate": "2020-01-22T17:41:19.162+01:00"
+        }
+      }
+    ],
+    "headers": {
+      "Content-Type": "application/hal+json"
+    }
+  }
+}

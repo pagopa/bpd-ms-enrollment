@@ -40,8 +40,23 @@
                 <artifactId>bpd-commons-core</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>it.gov.pagopa.bpd.commons</groupId>
+                <artifactId>bpd-commons-base</artifactId>
+                <type>test-jar</type>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>it.gov.pagopa.bpd.commons</groupId>
+            <artifactId>bpd-commons-base</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <modules>
         <module>app</module>

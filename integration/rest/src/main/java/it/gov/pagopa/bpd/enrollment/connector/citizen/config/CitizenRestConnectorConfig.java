@@ -4,6 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:config/BpdEnrollmentRestConnector.properties")
-public class BpdEnrollmentRestConnectorConfig {
+@PropertySource("classpath:config/citizen/CitizenRestConnector.properties")
+public class CitizenRestConnectorConfig {
 }

@@ -1,8 +1,8 @@
-package it.gov.pagopa.bpd.enrollment.connector.citizen;
+package it.gov.pagopa.bpd.enrollment.connector.payment_instrument;
 
 import eu.sia.meda.connector.meda.MedaInternalConnector;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import org.springframework.stereotype.Service;
 
 

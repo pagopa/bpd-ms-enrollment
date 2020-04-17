@@ -1,23 +1,26 @@
 package it.gov.pagopa.bpd.enrollment.connector.citizen;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.sia.meda.config.ArchConfiguration;
 import eu.sia.meda.connector.rest.model.RestConnectorRequest;
 import eu.sia.meda.connector.rest.model.RestConnectorResponse;
 import eu.sia.meda.connector.rest.transformer.request.SimpleRestGetRequestTransformer;
-import eu.sia.meda.connector.rest.transformer.response.SimpleRest2xxResponseTransformer;
 import it.gov.pagopa.bpd.common.BaseTest;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.BDDMockito;
 import org.mockito.Captor;
 import org.mockito.Mockito;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
@@ -27,11 +30,14 @@ public class CitizenRestClientImplTest extends BaseTest {
     private final CitizenRestClientImpl restClient;
     private final CitizenFindByIdRestConnector connector;
     private final SimpleRestGetRequestTransformer requestTransformer;
-    private final SimpleRest2xxResponseTransformer<CitizenResource> responseTransformer;
+    private final CitizenFindByIdResponseTransformer responseTransformer;
+    private final ObjectMapper mapper = new ArchConfiguration().objectMapper();
 
     private HttpStatus httpStatus;
     @Captor
     private ArgumentCaptor<HashMap<String, String>> requestArgsCaptor;
+    @Captor
+    private ArgumentCaptor<RestConnectorRequest<Void>> connectorRequestCaptor;
     @Captor
     private ArgumentCaptor<RestConnectorResponse<CitizenResource>> connectorResponseCaptor;
 
@@ -39,7 +45,7 @@ public class CitizenRestClientImplTest extends BaseTest {
     public CitizenRestClientImplTest() {
         connector = Mockito.mock(CitizenFindByIdRestConnector.class);
         requestTransformer = Mockito.spy(new SimpleRestGetRequestTransformer());
-        responseTransformer = Mockito.spy(new SimpleRest2xxResponseTransformer<>());
+        responseTransformer = Mockito.spy(new CitizenFindByIdResponseTransformer());
         restClient = new CitizenRestClientImpl(connector, requestTransformer, responseTransformer);
 
         configureTest();
@@ -47,10 +53,9 @@ public class CitizenRestClientImplTest extends BaseTest {
 
 
     private void configureTest() {
-        //noinspection unchecked
-        when(connector.call(isNull(), any(SimpleRestGetRequestTransformer.class), any(SimpleRest2xxResponseTransformer.class), any(HashMap.class)))
+        when(connector.call(isNull(), any(SimpleRestGetRequestTransformer.class), any(CitizenFindByIdResponseTransformer.class), any(HashMap.class)))
                 .thenAnswer(invocation -> {
-                    final RestConnectorRequest<Void> connectorRequest;
+                    RestConnectorRequest<Void> connectorRequest;
                     if (invocation.getArguments().length < 4) {
                         connectorRequest = requestTransformer.transform(invocation.getArgument(0));
 
@@ -60,8 +65,9 @@ public class CitizenRestClientImplTest extends BaseTest {
                                 new Object[]{invocation.getArgument(3)});
                     }
 
-                    CitizenResource resource = new CitizenResource();
-                    resource.setFiscalCode(connectorRequest.getParams().get("fiscalCode"));
+                    String fiscalCode = connectorRequest.getParams().get(CitizenRestClientImpl.FISCAL_CODE_PARAM_KEY);
+                    InputStream mockedJson = getClass().getClassLoader().getResourceAsStream(format("citizen/citizen_%s.json", fiscalCode));
+                    CitizenResource resource = mapper.readValue(mockedJson, CitizenResource.class);
                     ResponseEntity<CitizenResource> responseEntity = new ResponseEntity<>(resource, httpStatus);
                     RestConnectorResponse<CitizenResource> restResponse = new RestConnectorResponse<>();
                     restResponse.setResponse(responseEntity);
@@ -74,62 +80,60 @@ public class CitizenRestClientImplTest extends BaseTest {
     @Test
     public void findById_OK() {
         httpStatus = HttpStatus.OK;
-        final String fiscalCodeValue = RandomStringUtils.randomAlphanumeric(16);
+        final String fiscalCodeValue = "fiscalCode1";
 
         final CitizenResource result = restClient.findById(fiscalCodeValue);
 
-        Assert.assertNotNull(result);
-        Assert.assertEquals(fiscalCodeValue, result.getFiscalCode());
+        assertNotNull(result);
+        assertEquals(fiscalCodeValue, result.getFiscalCode());
 
-        BDDMockito.verify(connector, times(1))
+        checkInvocations(fiscalCodeValue);
+    }
+
+
+    private void checkInvocations(String fiscalCodeValue) {
+        verify(connector, times(1))
                 .call(isNull(), eq(requestTransformer), eq(responseTransformer), requestArgsCaptor.capture());
-        Assert.assertNotNull(requestArgsCaptor.getValue());
-        Assert.assertEquals(1, requestArgsCaptor.getValue().size());
-        Assert.assertEquals(fiscalCodeValue, requestArgsCaptor.getValue().get(CitizenRestClientImpl.FISCAL_CODE_PARAM_KEY));
+        assertNotNull(requestArgsCaptor.getValue());
+        assertEquals(1, requestArgsCaptor.getValue().size());
+        assertEquals(fiscalCodeValue, requestArgsCaptor.getValue().get(CitizenRestClientImpl.FISCAL_CODE_PARAM_KEY));
 
-        BDDMockito.verify(requestTransformer, times(1)).transform(isNull(), eq(requestArgsCaptor.getValue()));
+        verify(requestTransformer, times(1))
+                .transform(isNull(), eq(requestArgsCaptor.getValue()));
+        verify(requestTransformer, times(1))
+                .readArgs(connectorRequestCaptor.capture(), eq(requestArgsCaptor.getValue()));
+        assertNotNull(connectorRequestCaptor.getValue());
+        assertNotNull(connectorRequestCaptor.getValue().getMethod());
+        assertEquals(HttpMethod.GET, connectorRequestCaptor.getValue().getMethod());
 
-        BDDMockito.verify(responseTransformer, times(1)).transform(connectorResponseCaptor.capture());
-        Assert.assertNotNull(connectorResponseCaptor.getValue());
-        final ResponseEntity<CitizenResource> actualResponse = connectorResponseCaptor.getValue().getResponse();
-        Assert.assertNotNull(actualResponse);
-        Assert.assertEquals(httpStatus, actualResponse.getStatusCode());
-        Assert.assertNotNull(actualResponse.getBody());
-        Assert.assertEquals(fiscalCodeValue, actualResponse.getBody().getFiscalCode());
+        verify(responseTransformer, times(1))
+                .transform(connectorResponseCaptor.capture());
+        assertNotNull(connectorResponseCaptor.getValue());
+        assertNotNull(connectorResponseCaptor.getValue().getResponse());
+        assertEquals(httpStatus, connectorResponseCaptor.getValue().getResponse().getStatusCode());
+        assertNotNull(connectorResponseCaptor.getValue().getResponse().getBody());
+        assertEquals(fiscalCodeValue, connectorResponseCaptor.getValue().getResponse().getBody().getFiscalCode());
 
+        verifyNoMoreInteractions(connector, requestTransformer, responseTransformer);
     }
 
 
     @Test(expected = IllegalStateException.class)
     public void findById_ResponseStatusNotValid() {
         httpStatus = HttpStatus.BAD_REQUEST;
-        final String fiscalCodeValue = RandomStringUtils.randomAlphanumeric(16);
+        final String fiscalCodeValue = "fiscalCode1";
 
         try {
             restClient.findById(fiscalCodeValue);
 
         } finally {
-            BDDMockito.verify(connector, times(1))
-                    .call(isNull(), eq(requestTransformer), eq(responseTransformer), requestArgsCaptor.capture());
-            Assert.assertNotNull(requestArgsCaptor.getValue());
-            Assert.assertEquals(1, requestArgsCaptor.getValue().size());
-            Assert.assertEquals(fiscalCodeValue, requestArgsCaptor.getValue().get(CitizenRestClientImpl.FISCAL_CODE_PARAM_KEY));
-
-            BDDMockito.verify(requestTransformer, times(1)).transform(isNull(), eq(requestArgsCaptor.getValue()));
-
-            BDDMockito.verify(responseTransformer, times(1)).transform(connectorResponseCaptor.capture());
-            Assert.assertNotNull(connectorResponseCaptor.getValue());
-            final ResponseEntity<CitizenResource> actualResponse = connectorResponseCaptor.getValue().getResponse();
-            Assert.assertNotNull(actualResponse);
-            Assert.assertEquals(httpStatus, actualResponse.getStatusCode());
-            Assert.assertNotNull(actualResponse.getBody());
-            Assert.assertEquals(fiscalCodeValue, actualResponse.getBody().getFiscalCode());
+            checkInvocations(fiscalCodeValue);
         }
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void findById_IllegalArgument() {
+    public void findById_InvalidFiscalCode() {
         try {
             restClient.findById(null);
 

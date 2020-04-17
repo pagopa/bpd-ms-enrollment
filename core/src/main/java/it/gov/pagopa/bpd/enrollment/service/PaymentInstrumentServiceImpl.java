@@ -1,9 +1,9 @@
 package it.gov.pagopa.bpd.enrollment.service;
 
 import eu.sia.meda.service.BaseService;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.PaymentInstrumentRestClient;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.PaymentInstrumentRestClient;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

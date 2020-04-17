@@ -1,7 +1,6 @@
 package it.gov.pagopa.bpd.enrollment.connector.citizen;
 
 import eu.sia.meda.connector.rest.transformer.request.SimpleRestGetRequestTransformer;
-import eu.sia.meda.connector.rest.transformer.response.SimpleRest2xxResponseTransformer;
 import eu.sia.meda.service.BaseService;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,13 @@ class CitizenRestClientImpl extends BaseService implements CitizenRestClient {
 
     private final CitizenFindByIdRestConnector connector;
     private final SimpleRestGetRequestTransformer requestTransformer;
-    private final SimpleRest2xxResponseTransformer<CitizenResource> responseTransformer;
+    private final CitizenFindByIdResponseTransformer responseTransformer;
 
 
     @Autowired
     public CitizenRestClientImpl(CitizenFindByIdRestConnector connector,
                                  SimpleRestGetRequestTransformer requestTransformer,
-                                 SimpleRest2xxResponseTransformer<CitizenResource> responseTransformer) {
+                                 CitizenFindByIdResponseTransformer responseTransformer) {
         this.connector = connector;
         this.requestTransformer = requestTransformer;
         this.responseTransformer = responseTransformer;

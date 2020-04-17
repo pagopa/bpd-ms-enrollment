@@ -1,6 +1,6 @@
 package it.gov.pagopa.bpd.enrollment.factory;
 
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
 import org.junit.Assert;
 import org.junit.Test;

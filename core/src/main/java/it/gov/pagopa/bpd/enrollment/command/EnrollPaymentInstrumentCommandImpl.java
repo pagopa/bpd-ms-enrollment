@@ -2,8 +2,8 @@ package it.gov.pagopa.bpd.enrollment.command;
 
 import eu.sia.meda.core.command.BaseCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;

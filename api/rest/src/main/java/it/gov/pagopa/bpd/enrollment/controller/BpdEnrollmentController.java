@@ -1,7 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.controller;
 
 import io.swagger.annotations.Api;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

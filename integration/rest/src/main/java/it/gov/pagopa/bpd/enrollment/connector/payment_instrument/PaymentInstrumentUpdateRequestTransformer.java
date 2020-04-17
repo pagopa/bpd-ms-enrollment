@@ -1,9 +1,9 @@
-package it.gov.pagopa.bpd.enrollment.connector.citizen;
+package it.gov.pagopa.bpd.enrollment.connector.payment_instrument;
 
 import eu.sia.meda.connector.rest.model.RestConnectorRequest;
 import eu.sia.meda.connector.rest.transformer.IRestRequestTransformer;
 import eu.sia.meda.connector.rest.transformer.request.BaseSimpleRestRequestTransformer;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 

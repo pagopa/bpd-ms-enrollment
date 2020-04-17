@@ -2,8 +2,8 @@ package it.gov.pagopa.bpd.enrollment.controller;
 
 import eu.sia.meda.core.controller.StatelessController;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentDto;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.factory.ModelFactory;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
 import org.springframework.beans.factory.BeanFactory;

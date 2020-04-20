@@ -25,9 +25,9 @@ public class EnrollmentDtoValidationTest {
 
     @Test
     public void testValid() {
-        EnrollmentDto enrollmentDto = new EnrollmentDto();
+        EnrollmentPaymentInstrumentDto enrollmentDto = new EnrollmentPaymentInstrumentDto();
         enrollmentDto.setActivationDate(OffsetDateTime.now());
-        Set<ConstraintViolation<EnrollmentDto>> violations = validator.validate(enrollmentDto);
+        Set<ConstraintViolation<EnrollmentPaymentInstrumentDto>> violations = validator.validate(enrollmentDto);
 
         Assert.assertTrue(violations.isEmpty());
     }
@@ -35,9 +35,9 @@ public class EnrollmentDtoValidationTest {
 
     @Test
     public void testInvalidActivationDate() {
-        EnrollmentDto enrollmentDto = new EnrollmentDto();
+        EnrollmentPaymentInstrumentDto enrollmentDto = new EnrollmentPaymentInstrumentDto();
         enrollmentDto.setActivationDate(null);
-        Set<ConstraintViolation<EnrollmentDto>> violations = validator.validate(enrollmentDto);
+        Set<ConstraintViolation<EnrollmentPaymentInstrumentDto>> violations = validator.validate(enrollmentDto);
 
         violations.removeIf(violation ->
                 "activationDate".equals(violation.getPropertyPath().toString()) &&

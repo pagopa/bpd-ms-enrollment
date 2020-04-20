@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Data
-public class EnrollmentDto {
+public class EnrollmentPaymentInstrumentDto {
 
     @NotNull
     private OffsetDateTime activationDate;

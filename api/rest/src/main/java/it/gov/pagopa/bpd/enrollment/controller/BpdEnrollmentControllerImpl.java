@@ -2,32 +2,56 @@ package it.gov.pagopa.bpd.enrollment.controller;
 
 import eu.sia.meda.core.controller.StatelessController;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.factory.ModelFactory;
-import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.constraints.NotBlank;
 
 @RestController
 class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnrollmentController {
 
     private final BeanFactory beanFactory;
-    private final ModelFactory<EnrollmentDto, PaymentInstrumentDto> paymentInstrumentFactory;
+    private final ModelFactory<EnrollmentPaymentInstrumentDto, PaymentInstrumentDto> paymentInstrumentFactory;
+    private final CitizenService citizenService;
 
 
     @Autowired
     public BpdEnrollmentControllerImpl(BeanFactory beanFactory,
-                                       ModelFactory<EnrollmentDto, PaymentInstrumentDto> paymentInstrumentFactory) {
+                                       ModelFactory<EnrollmentPaymentInstrumentDto, PaymentInstrumentDto> paymentInstrumentFactory,
+                                       CitizenService citizenService) {
         this.beanFactory = beanFactory;
         this.paymentInstrumentFactory = paymentInstrumentFactory;
+        this.citizenService = citizenService;
     }
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentDto request) {
-        logger.info(request.toString());
+    public CitizenResource enrollCitizenIO(CitizenDto request) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("BpdEnrollmentControllerImpl.enrollCitizenIO");
+            logger.debug(String.format("request = [%s]", request));
+        }
+
+        String fiscalCode = "test";//TODO: get fiscal code from auth token
+
+        return citizenService.update(fiscalCode, request);
+    }
+
+
+    @Override
+    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentPaymentInstrumentDto request) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentIO");
+            logger.debug("hashPan = [" + hashPan + "], request = [" + request + "]");
+        }
 
         String fiscalCode = "test";//FIXME: get fiscal code from token
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.createModel(request);
@@ -36,6 +60,36 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
         PaymentInstrumentResource result = null;
         try {
             result = beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO).execute();
+        } catch (Exception e) {
+            logger.error("Something gone wrong", e);
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public CitizenResource enrollCitizenHB(@NotBlank String fiscalCode, CitizenDto request) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("BpdEnrollmentControllerImpl.enrollCitizenHB");
+            logger.debug("fiscalCode = [" + fiscalCode + "], request = [" + request + "]");
+        }
+
+
+        return citizenService.update(fiscalCode, request);
+    }
+
+
+    @Override
+    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, PaymentInstrumentDto request) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentHB");
+            logger.debug(String.format("request = [%s]", request));
+        }
+
+        PaymentInstrumentResource result = null;
+        try {
+            result = beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request).execute();
         } catch (Exception e) {
             logger.error("Something gone wrong", e);
         }

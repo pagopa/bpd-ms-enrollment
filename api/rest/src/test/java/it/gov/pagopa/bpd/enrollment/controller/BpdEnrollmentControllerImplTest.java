@@ -7,7 +7,7 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.factory.ModelFactory;
 import it.gov.pagopa.bpd.enrollment.factory.PaymentInstrumentFactory;
-import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -50,14 +50,14 @@ public class BpdEnrollmentControllerImplTest {
     private EnrollPaymentInstrumentCommand paymentInstrumentCommandMock;
 
     @SpyBean
-    private ModelFactory<EnrollmentDto, PaymentInstrumentDto> paymentInstrumentFactoryMock;
+    private ModelFactory<EnrollmentPaymentInstrumentDto, PaymentInstrumentDto> paymentInstrumentFactoryMock;
 
 
     @Test
     public void enrollPaymentInstrumentIO_OK() throws Exception {
         final String hashPanValue = "hashPan";
         final String fiscalCodeValue = "test";
-        EnrollmentDto request = new EnrollmentDto();
+        EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
         reset(paymentInstrumentCommandMock);
@@ -97,7 +97,7 @@ public class BpdEnrollmentControllerImplTest {
     public void enrollPaymentInstrumentIO_OKBadRequest() throws Exception {
         final String hashPanValue = "hashPan";
         final String fiscalCodeValue = "test";
-        EnrollmentDto request = new EnrollmentDto();
+        EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setActivationDate(null);
 
         reset(paymentInstrumentCommandMock);
@@ -125,7 +125,7 @@ public class BpdEnrollmentControllerImplTest {
     //    @Test
     public void enrollPaymentInstrumentIO_KOException() throws Exception {
         final String hashPanValue = "hashPan";
-        EnrollmentDto request = new EnrollmentDto();
+        EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
         reset(paymentInstrumentCommandMock);

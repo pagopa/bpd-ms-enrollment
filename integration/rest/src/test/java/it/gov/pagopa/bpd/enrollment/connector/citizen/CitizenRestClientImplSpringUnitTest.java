@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 
 @TestPropertySource(
         locations = {
-                "classpath:config/citizen/CitizenRestConnector.properties"
+                "classpath:config/citizen/CitizenFindByIdRestConnector.properties"
         },
         properties = {
                 "connectors.medaInternalConfigurations.items.CitizenFindByIdRestConnector.mocked=true",

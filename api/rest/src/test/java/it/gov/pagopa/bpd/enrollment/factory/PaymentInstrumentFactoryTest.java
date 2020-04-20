@@ -1,7 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.factory;
 
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
-import it.gov.pagopa.bpd.enrollment.model.EnrollmentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ public class PaymentInstrumentFactoryTest {
     private final PaymentInstrumentFactory factory = new PaymentInstrumentFactory();
 
     @Parameterized.Parameter(0)
-    public EnrollmentDto input;
+    public EnrollmentPaymentInstrumentDto input;
 
     @Parameterized.Parameter(1)
     public PaymentInstrumentDto expectedOutput;
@@ -28,17 +28,17 @@ public class PaymentInstrumentFactoryTest {
     @Parameterized.Parameters
     public static Collection<Object[]> getParams() {
         Collection<Object[]> params = new ArrayList<>();
-        EnrollmentDto input;
+        EnrollmentPaymentInstrumentDto input;
         PaymentInstrumentDto expectedOutput;
 
-        input = new EnrollmentDto();
+        input = new EnrollmentPaymentInstrumentDto();
         input.setActivationDate(OFFSET_DATE_TIME);
         expectedOutput = new PaymentInstrumentDto();
         expectedOutput.setActivationDate(input.getActivationDate());
         expectedOutput.setFiscalCode(null);
         params.add(new Object[]{input, expectedOutput});
 
-        input = new EnrollmentDto();
+        input = new EnrollmentPaymentInstrumentDto();
         input.setActivationDate(null);
         expectedOutput = new PaymentInstrumentDto();
         expectedOutput.setActivationDate(null);

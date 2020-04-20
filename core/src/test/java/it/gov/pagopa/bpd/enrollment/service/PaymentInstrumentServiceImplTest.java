@@ -3,7 +3,7 @@ package it.gov.pagopa.bpd.enrollment.service;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.PaymentInstrumentRestClient;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
-import org.junit.Assert;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -16,12 +16,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = PaymentInstrumentServiceImpl.class)
 public class PaymentInstrumentServiceImplTest {
-
-    private static final OffsetDateTime CURRENT_DATE_TIME = OffsetDateTime.now();
-    private static final String FISCAL_CODE = "fiscalCode";
 
     @MockBean
     private PaymentInstrumentRestClient restClientMock;
@@ -34,12 +35,12 @@ public class PaymentInstrumentServiceImplTest {
     public void configureMock() {
         BDDMockito.when(restClientMock.update(Mockito.any(String.class), Mockito.any(PaymentInstrumentDto.class)))
                 .thenAnswer(invocation -> {
-                    final PaymentInstrumentDto dtoArgument = invocation.getArgument(1, PaymentInstrumentDto.class);
-                    final PaymentInstrumentResource result = new PaymentInstrumentResource();
+                    PaymentInstrumentDto dtoArgument = invocation.getArgument(1, PaymentInstrumentDto.class);
+                    PaymentInstrumentResource result = new PaymentInstrumentResource();
                     result.setHpan(invocation.getArgument(0));
                     result.setActivationDate(dtoArgument.getActivationDate());
                     result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
-                    result.setFiscalCode(FISCAL_CODE);
+                    result.setFiscalCode(dtoArgument.getFiscalCode());
 
                     return result;
                 });
@@ -48,18 +49,19 @@ public class PaymentInstrumentServiceImplTest {
 
     @Test
     public void update() {
-        final String hashPan = "hpan";
-        final PaymentInstrumentDto dto = new PaymentInstrumentDto();
-        dto.setActivationDate(CURRENT_DATE_TIME);
+        String hashPan = RandomStringUtils.randomNumeric(16);
+        PaymentInstrumentDto dto = new PaymentInstrumentDto();
+        dto.setFiscalCode(RandomStringUtils.randomAlphanumeric(16));
+        dto.setActivationDate(OffsetDateTime.now());
 
-        final PaymentInstrumentResource updated = paymentInstrumentService.update(hashPan, dto);
+        PaymentInstrumentResource updated = paymentInstrumentService.update(hashPan, dto);
 
-        BDDMockito.verify(restClientMock, Mockito.times(1)).update(Mockito.eq(hashPan), Mockito.eq(dto));
-        BDDMockito.verify(restClientMock, Mockito.only()).update(Mockito.eq(hashPan), Mockito.eq(dto));
-        Assert.assertEquals(hashPan, updated.getHpan());
-        Assert.assertEquals(CURRENT_DATE_TIME, updated.getActivationDate());
-        Assert.assertEquals(PaymentInstrumentResource.Status.ACTIVE, updated.getStatus());
-        Assert.assertEquals(FISCAL_CODE, updated.getFiscalCode());
+        verify(restClientMock, only()).update(eq(hashPan), eq(dto));
+        verify(restClientMock, times(1)).update(eq(hashPan), eq(dto));
+        assertEquals(hashPan, updated.getHpan());
+        assertEquals(dto.getActivationDate(), updated.getActivationDate());
+        assertEquals(PaymentInstrumentResource.Status.ACTIVE, updated.getStatus());
+        assertEquals(dto.getFiscalCode(), updated.getFiscalCode());
     }
 
 }

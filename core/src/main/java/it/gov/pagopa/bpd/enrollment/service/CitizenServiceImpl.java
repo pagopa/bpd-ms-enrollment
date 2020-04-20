@@ -2,6 +2,7 @@ package it.gov.pagopa.bpd.enrollment.service;
 
 import eu.sia.meda.service.BaseService;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.CitizenRestClient;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,4 +24,9 @@ class CitizenServiceImpl extends BaseService implements CitizenService {
         return restClient.findById(fiscalCode);
     }
 
+
+    @Override
+    public CitizenResource update(String fiscalCode, CitizenDto dto) {
+        return restClient.update(fiscalCode, dto);
+    }
 }

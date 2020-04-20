@@ -2,6 +2,7 @@ package it.gov.pagopa.bpd.enrollment.connector.citizen;
 
 import eu.sia.meda.connector.rest.transformer.request.SimpleRestGetRequestTransformer;
 import eu.sia.meda.service.BaseService;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,18 +14,28 @@ class CitizenRestClientImpl extends BaseService implements CitizenRestClient {
 
     static final String FISCAL_CODE_PARAM_KEY = "fiscalCode";
 
-    private final CitizenFindByIdRestConnector connector;
-    private final SimpleRestGetRequestTransformer requestTransformer;
-    private final CitizenFindByIdResponseTransformer responseTransformer;
+    private final CitizenFindByIdRestConnector findByIdRestConnector;
+    private final SimpleRestGetRequestTransformer getRequestTransformer;
+    private final CitizenFindByIdResponseTransformer findByIdResponseTransformer;
+
+    private final CitizenUpdateRestConnector updateRestConnector;
+    private final CitizenUpdateRequestTransformer updateRequestTransformer;
+    private final CitizenUpdateResponseTransformer updateResponseTransformer;
 
 
     @Autowired
-    public CitizenRestClientImpl(CitizenFindByIdRestConnector connector,
-                                 SimpleRestGetRequestTransformer requestTransformer,
-                                 CitizenFindByIdResponseTransformer responseTransformer) {
-        this.connector = connector;
-        this.requestTransformer = requestTransformer;
-        this.responseTransformer = responseTransformer;
+    public CitizenRestClientImpl(CitizenFindByIdRestConnector findByIdRestConnector,
+                                 SimpleRestGetRequestTransformer getRequestTransformer,
+                                 CitizenFindByIdResponseTransformer findByIdResponseTransformer,
+                                 CitizenUpdateRestConnector updateRestConnector,
+                                 CitizenUpdateRequestTransformer updateRequestTransformer,
+                                 CitizenUpdateResponseTransformer updateResponseTransformer) {
+        this.findByIdRestConnector = findByIdRestConnector;
+        this.getRequestTransformer = getRequestTransformer;
+        this.findByIdResponseTransformer = findByIdResponseTransformer;
+        this.updateRestConnector = updateRestConnector;
+        this.updateRequestTransformer = updateRequestTransformer;
+        this.updateResponseTransformer = updateResponseTransformer;
     }
 
 
@@ -35,7 +46,24 @@ class CitizenRestClientImpl extends BaseService implements CitizenRestClient {
 
         final HashMap<String, Object> params = new HashMap<>();
         params.put(FISCAL_CODE_PARAM_KEY, fiscalCode);
-        return connector.call(null, requestTransformer, responseTransformer, params);
+
+        return findByIdRestConnector.call(null, getRequestTransformer, findByIdResponseTransformer, params);
+    }
+
+
+    @Override
+    public CitizenResource update(String fiscalCode, CitizenDto dto) {
+        if (fiscalCode == null) {
+            throw new IllegalArgumentException("Fiscal Code cannot be null");
+        }
+        if (dto == null) {
+            throw new IllegalArgumentException("Request body cannot be null");
+        }
+
+        final HashMap<String, Object> params = new HashMap<>();
+        params.put(FISCAL_CODE_PARAM_KEY, fiscalCode);
+
+        return updateRestConnector.call(dto, updateRequestTransformer, updateResponseTransformer, params);
     }
 
 }

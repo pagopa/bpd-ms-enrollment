@@ -28,18 +28,18 @@ class PaymentInstrumentRestClientImpl implements PaymentInstrumentRestClient {
 
 
     @Override
-    public PaymentInstrumentResource update(String hashPan, PaymentInstrumentDto paymentInstrumentDTO) {
+    public PaymentInstrumentResource update(String hashPan, PaymentInstrumentDto request) {
         if (hashPan == null) {
             throw new IllegalArgumentException("Hashed PAN cannot be null");
         }
-        if (paymentInstrumentDTO == null) {
-            throw new IllegalArgumentException("PaymentInstrumentDto cannot be null");
+        if (request == null) {
+            throw new IllegalArgumentException("Request body cannot be null");
         }
 
         final HashMap<String, Object> params = new HashMap<>();
         params.put(HASH_PAN_PARAM_KEY, hashPan);
 
-        return restConnector.call(paymentInstrumentDTO, requestTransformer, responseTransformer, params);
+        return restConnector.call(request, requestTransformer, responseTransformer, params);
     }
 
 }

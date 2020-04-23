@@ -31,25 +31,24 @@
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>it.gov.pagopa.bpd.commons.api</groupId>
-                <artifactId>bpd-commons-api-rest</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
                 <groupId>it.gov.pagopa.bpd.commons</groupId>
-                <artifactId>bpd-commons-core</artifactId>
+                <artifactId>bpd-commons-base</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.commons</groupId>
                 <artifactId>bpd-commons-base</artifactId>
-                <type>test-jar</type>
                 <version>1.0-SNAPSHOT</version>
+                <type>test-jar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>it.gov.pagopa.bpd.commons</groupId>
+            <artifactId>bpd-commons-base</artifactId>
+        </dependency>
         <dependency>
             <groupId>it.gov.pagopa.bpd.commons</groupId>
             <artifactId>bpd-commons-base</artifactId>

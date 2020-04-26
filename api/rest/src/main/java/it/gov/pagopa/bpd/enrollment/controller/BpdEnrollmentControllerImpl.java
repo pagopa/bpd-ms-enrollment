@@ -91,7 +91,9 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
         try {
             result = beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request).execute();
         } catch (Exception e) {
-            logger.error("Something gone wrong", e);
+            if (logger.isErrorEnabled()) {
+                logger.error("Something gone wrong", e);
+            }
         }
 
         return result;

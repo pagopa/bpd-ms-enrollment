@@ -47,7 +47,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentPaymentInstrumentDto request) {
+    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentIO");
             logger.debug("hashPan = [" + hashPan + "], request = [" + request + "]");
@@ -57,14 +57,8 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.createModel(request);
         paymentInstrumentDTO.setFiscalCode(fiscalCode);
 
-        PaymentInstrumentResource result = null;
-        try {
-            result = beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO).execute();
-        } catch (Exception e) {
-            logger.error("Something gone wrong", e);
-        }
-
-        return result;
+        return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)
+                .execute();
     }
 
 
@@ -75,28 +69,19 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
             logger.debug("fiscalCode = [" + fiscalCode + "], request = [" + request + "]");
         }
 
-
         return citizenService.update(fiscalCode, request);
     }
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, PaymentInstrumentDto request) {
+    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, PaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentHB");
             logger.debug(String.format("request = [%s]", request));
         }
 
-        PaymentInstrumentResource result = null;
-        try {
-            result = beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request).execute();
-        } catch (Exception e) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Something gone wrong", e);
-            }
-        }
-
-        return result;
+        return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request)
+                .execute();
     }
 
 }

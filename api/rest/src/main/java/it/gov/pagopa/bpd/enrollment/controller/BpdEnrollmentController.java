@@ -28,7 +28,7 @@ public interface BpdEnrollmentController {
     @PutMapping(value = "/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     PaymentInstrumentResource enrollPaymentInstrumentIO(@PathVariable("id") @NotBlank String hashPan,
-                                                        @RequestBody @Valid EnrollmentPaymentInstrumentDto request);
+                                                        @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
 
     @PutMapping(value = "hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -40,6 +40,6 @@ public interface BpdEnrollmentController {
     @PutMapping(value = "/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     PaymentInstrumentResource enrollPaymentInstrumentHB(@PathVariable("id") @NotBlank String hashPan,
-                                                        @RequestBody @Valid PaymentInstrumentDto request);
+                                                        @RequestBody @Valid PaymentInstrumentDto request) throws Exception;
 
 }

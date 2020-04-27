@@ -8,6 +8,7 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import it.gov.pagopa.bpd.enrollment.factory.ModelFactory;
 import it.gov.pagopa.bpd.enrollment.factory.PaymentInstrumentFactory;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -25,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
 public class BpdEnrollmentControllerImplTest {
 
     private static final String URL_TEMPLATE_PREFIX = "/bpd/enrollment";
-    private static final OffsetDateTime CURRENT_OFFSET_DATE_TIME = OffsetDateTime.now(ZoneOffset.UTC);
+    private static final OffsetDateTime CURRENT_OFFSET_DATE_TIME = OffsetDateTime.now();
 
     @Autowired
     private MockMvc mvc;
@@ -48,6 +48,9 @@ public class BpdEnrollmentControllerImplTest {
 
     @MockBean
     private EnrollPaymentInstrumentCommand paymentInstrumentCommandMock;
+
+    @MockBean
+    private CitizenService citizenService;
 
     @SpyBean
     private ModelFactory<EnrollmentPaymentInstrumentDto, PaymentInstrumentDto> paymentInstrumentFactoryMock;

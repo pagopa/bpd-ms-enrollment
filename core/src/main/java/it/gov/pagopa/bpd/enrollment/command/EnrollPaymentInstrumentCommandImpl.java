@@ -40,7 +40,7 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
             paymentInstrumentResource = paymentInstrumentService.update(hashPan, paymentInstrumentDTO);
 
         } else {
-            throw new CitizenNotEnabledException();
+            throw new CitizenNotEnabledException(paymentInstrumentDTO.getFiscalCode());
         }
 
         return paymentInstrumentResource;

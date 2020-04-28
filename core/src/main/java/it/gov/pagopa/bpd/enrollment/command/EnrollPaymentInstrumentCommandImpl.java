@@ -12,6 +12,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+/**
+ * @see it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand
+ */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentResource> implements EnrollPaymentInstrumentCommand {

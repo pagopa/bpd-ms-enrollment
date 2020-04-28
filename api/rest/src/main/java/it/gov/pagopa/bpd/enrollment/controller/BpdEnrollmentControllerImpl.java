@@ -1,12 +1,12 @@
 package it.gov.pagopa.bpd.enrollment.controller;
 
 import eu.sia.meda.core.controller.StatelessController;
+import it.gov.pagopa.bpd.common.factory.ModelFactory;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
-import it.gov.pagopa.bpd.enrollment.factory.ModelFactory;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import org.springframework.beans.factory.BeanFactory;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * @see BpdEnrollmentController
+ */
 @RestController
 class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnrollmentController {
 
@@ -54,7 +57,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
         }
 
         String fiscalCode = "test";//FIXME: get fiscal code from token
-        final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.createModel(request);
+        final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
         paymentInstrumentDTO.setFiscalCode(fiscalCode);
 
         return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+/**
+ * @see it.gov.pagopa.bpd.enrollment.connector.payment_instrument.PaymentInstrumentRestClient
+ */
 @Service
 class PaymentInstrumentRestClientImpl implements PaymentInstrumentRestClient {
 

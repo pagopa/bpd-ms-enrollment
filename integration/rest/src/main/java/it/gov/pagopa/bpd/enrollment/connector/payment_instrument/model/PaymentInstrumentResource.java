@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 
 import java.time.OffsetDateTime;
 
+/**
+ * Resource model (output) for {@link it.gov.pagopa.bpd.enrollment.connector.payment_instrument.PaymentInstrumentRestClient}
+ */
 @Data
 @EqualsAndHashCode(of = "hpan", callSuper = false)
 public class PaymentInstrumentResource {

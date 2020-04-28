@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import java.time.OffsetDateTime;
 
 
+/**
+ * Resource model (output) for {@link it.gov.pagopa.bpd.enrollment.connector.citizen.CitizenRestClient}
+ */
 @Data
 @EqualsAndHashCode(of = "fiscalCode", callSuper = false)
 public class CitizenResource {

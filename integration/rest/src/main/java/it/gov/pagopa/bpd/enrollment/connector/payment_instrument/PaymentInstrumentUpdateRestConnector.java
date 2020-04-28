@@ -5,7 +5,9 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * Rest Connector for Payment Instrument update service
+ */
 @Service
 class PaymentInstrumentUpdateRestConnector
         extends MedaInternalConnector<PaymentInstrumentDto, PaymentInstrumentResource, PaymentInstrumentDto, PaymentInstrumentResource> {

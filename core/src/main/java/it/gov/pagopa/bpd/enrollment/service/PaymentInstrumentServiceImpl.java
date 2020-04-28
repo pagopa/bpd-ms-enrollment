@@ -7,6 +7,9 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @see it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService
+ */
 @Service
 class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrumentService {
 

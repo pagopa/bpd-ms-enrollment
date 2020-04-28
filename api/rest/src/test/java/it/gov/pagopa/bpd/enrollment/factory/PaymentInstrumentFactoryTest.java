@@ -56,7 +56,7 @@ public class PaymentInstrumentFactoryTest {
     @Test
     public void createModel() {
         try {
-            final PaymentInstrumentDto output = factory.createModel(input);
+            final PaymentInstrumentDto output = factory.apply(input);
 
             Assert.assertEquals(expectedOutput, output);
 

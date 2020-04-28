@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+/**
+ * @see it.gov.pagopa.bpd.enrollment.connector.citizen.CitizenRestClient
+ */
 @Service
 class CitizenRestClientImpl extends BaseService implements CitizenRestClient {
 

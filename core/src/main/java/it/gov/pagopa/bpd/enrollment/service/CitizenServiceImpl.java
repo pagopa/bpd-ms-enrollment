@@ -7,6 +7,9 @@ import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @see it.gov.pagopa.bpd.enrollment.service.CitizenService
+ */
 @Service
 class CitizenServiceImpl extends BaseService implements CitizenService {
 

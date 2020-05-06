@@ -4,6 +4,7 @@ import it.gov.pagopa.bpd.common.model.validation.FutureOrPresentWithTolerance;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
 /**
@@ -14,6 +15,7 @@ public class PaymentInstrumentDto {
 
     @NotNull
 //    @NotBlank
+    @Size(max = 16)
     private String fiscalCode;
     @NotNull
     @FutureOrPresentWithTolerance(tolerance = 60)

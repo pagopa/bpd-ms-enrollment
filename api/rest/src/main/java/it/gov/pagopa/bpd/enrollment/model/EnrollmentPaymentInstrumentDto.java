@@ -1,5 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import it.gov.pagopa.bpd.common.model.validation.FutureOrPresentWithTolerance;
 import lombok.Data;
 
@@ -12,6 +14,8 @@ import java.time.OffsetDateTime;
 @Data
 public class EnrollmentPaymentInstrumentDto {
 
+    @ApiModelProperty(value = "${swagger.enrollment.activationDate}", required = true)
+    @JsonProperty(required = true)
     @NotNull
     @FutureOrPresentWithTolerance(tolerance = 60)
     private OffsetDateTime activationDate;

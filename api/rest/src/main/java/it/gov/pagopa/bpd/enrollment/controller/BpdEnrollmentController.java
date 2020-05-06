@@ -1,6 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
@@ -27,19 +28,32 @@ public interface BpdEnrollmentController {
 
     @PutMapping(value = "/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentIO(@PathVariable("id") @NotBlank String hashPan,
-                                                        @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
+    PaymentInstrumentResource enrollPaymentInstrumentIO(
+            @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
+            @PathVariable("id")
+            @NotBlank
+                    String hashPan,
+            @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
 
     @PutMapping(value = "hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    CitizenResource enrollCitizenHB(@PathVariable("id") @NotBlank String fiscalCode,
-                                    @RequestBody @Valid CitizenDto request);
+    CitizenResource enrollCitizenHB(
+            @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
+            @PathVariable("id")
+            @NotBlank
+                    String fiscalCode,
+            @RequestBody @Valid CitizenDto request
+    );
 
 
     @PutMapping(value = "/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentHB(@PathVariable("id") @NotBlank String hashPan,
-                                                        @RequestBody @Valid PaymentInstrumentDto request) throws Exception;
+    PaymentInstrumentResource enrollPaymentInstrumentHB(
+            @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
+            @PathVariable("id")
+            @NotBlank
+                    String hashPan,
+            @RequestBody @Valid PaymentInstrumentDto request) throws Exception;
 
 }

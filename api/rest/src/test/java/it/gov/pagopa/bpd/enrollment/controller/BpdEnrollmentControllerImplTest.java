@@ -261,7 +261,7 @@ public class BpdEnrollmentControllerImplTest {
 
     @Test
     public void enrollCitizenHB_OK() throws Exception {
-        final String fiscalCode = "test";
+        final String fiscalCode = "DHFIVD85M84D048L";
         CitizenDto request = new CitizenDto();
         request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 

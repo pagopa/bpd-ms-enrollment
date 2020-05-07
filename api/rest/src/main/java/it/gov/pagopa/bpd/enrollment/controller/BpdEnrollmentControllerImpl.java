@@ -13,7 +13,6 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
@@ -57,7 +56,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
             logger.debug("hashPan = [" + hashPan + "], request = [" + request + "]");
         }
 
-        @Size(max = 16) String fiscalCode = "test";//FIXME: get fiscal code from token
+        String fiscalCode = "DH5IVD85M84D048L";//FIXME: get fiscal code from token
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
         paymentInstrumentDTO.setFiscalCode(fiscalCode);
 
@@ -67,7 +66,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public CitizenResource enrollCitizenHB(@NotBlank @Size(max = 16) String fiscalCode, CitizenDto request) {
+    public CitizenResource enrollCitizenHB(String fiscalCode, CitizenDto request) {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenHB");
             logger.debug("fiscalCode = [" + fiscalCode + "], request = [" + request + "]");

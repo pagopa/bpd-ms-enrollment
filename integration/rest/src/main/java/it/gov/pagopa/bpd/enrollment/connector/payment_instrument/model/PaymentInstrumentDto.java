@@ -1,6 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model;
 
 import it.gov.pagopa.bpd.common.model.validation.FutureOrPresentWithTolerance;
+import it.gov.pagopa.bpd.common.util.Constants;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class PaymentInstrumentDto {
     @Size(max = 16)
     private String fiscalCode;
     @NotNull
-    @FutureOrPresentWithTolerance(tolerance = 60)
+    @FutureOrPresentWithTolerance(tolerance = Constants.FUTURE_OR_PRESENT_TOLERANCE)
     private OffsetDateTime activationDate;
 
 }

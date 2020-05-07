@@ -1,2 +1,2 @@
 # bpd-ms-enrollment
-Il componente di Enrollment si occupa dell’abilitazione/salvataggio del mezzo di pagamento al programma di bonus pagamenti digitali.
+The Enrollment component deals with the qualification/enrollment of the citizen and the related payment instruments to the Bonus Pagamenti Digitali program.

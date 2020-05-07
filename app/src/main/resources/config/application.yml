@@ -27,4 +27,4 @@ meda:
 
 logging:
   level:
-    it.gov.pagopa.bpd..enrollment: ${LOG_LEVEL_BPD_ENROLLMENT:DEBUG}
+    it.gov.pagopa.bpd.enrollment: ${LOG_LEVEL_BPD_ENROLLMENT:DEBUG}

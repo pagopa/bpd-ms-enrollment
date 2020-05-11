@@ -1,18 +1,25 @@
 package it.gov.pagopa.bpd.enrollment.connector.citizen.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import feign.Logger;
+import feign.RequestInterceptor;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+//@Slf4j
 @Configuration
 @EnableFeignClients(basePackages = "it.gov.pagopa.bpd.enrollment.connector.citizen")
 @PropertySource({
@@ -22,33 +29,74 @@ import org.springframework.context.annotation.PropertySource;
 })
 public class CitizenRestConnectorConfig {
 
-    @Value("${feign.logger.level}")
-    private String loggerLevel;
-
     @Autowired
     private ObjectMapper objectMapper;
 
+
+//    @Bean
+//    public RequestInterceptor copyHeadersInterceptor() {
+//        return requestTemplate -> {
+//            Map<String, String> headers = BaseContextHolder.getApplicationContext().getCopyHeader();
+//            if (headers != null) {
+//                for (Map.Entry<String, String> h : headers.entrySet()) {
+//                    requestTemplate.header(h.getKey(), h.getValue());
+//                }
+//            }
+//        };
+//    }
+
+//    @Bean
+//    public RequestInterceptor copyHeadersInterceptor() {
+//        return new CopyHeadersInterceptor();
+//    }
+
+    //    @Bean
+//    public RequestInterceptor addAuthorizationHeaderInterceptor() {
+//        return requestTemplate -> {
+//            try {
+//                String authorizationHeader = BaseContextHolder.getAuthorizationContext().getAuthorizationHeader();
+//                if (authorizationHeader != null) {
+//                    requestTemplate.header("Authorization", authorizationHeader);
+//                }
+//            } catch (Exception var3) {
+//                if (log.isErrorEnabled()) {
+//                    log.error(LoggerUtils.formatArchRow("error retrieving authorization header"));
+//                }
+//            }
+//        };
+//    }
     @Bean
-    public Encoder feignEncoder() {
-        return new JacksonEncoder(objectMapper);
+    public RequestInterceptor addAuthorizationHeaderInterceptor() {
+        return new AddAuthorizationHeaderInterceptor();
     }
+
+    @Bean
+    public RequestInterceptor queryParamsPlusEncoderInterceptor() {
+        return requestTemplate -> {
+            final Map<String, Collection<String>> queriesPlusEncoded = new HashMap<>();
+            requestTemplate.queries().forEach((key, value) -> queriesPlusEncoded.put(key, value.stream()
+                    .map(paramValue -> paramValue.replace("+", "%2B"))
+                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll)));
+            requestTemplate.queries(null);
+            requestTemplate.queries(queriesPlusEncoded);
+        };
+    }
+
 
     @Bean
     public Decoder feignDecoder() {
-        return new JacksonDecoder(objectMapper);
+        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
+        ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
+
+        return new ResponseEntityDecoder(new SpringDecoder(objectFactory));
     }
 
-//    @Bean
-//    public Decoder feignDecoder() {
-//        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
-//        ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
-//
-//        return new ResponseEntityDecoder(new SpringDecoder(objectFactory));
-//    }
-
     @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.valueOf(loggerLevel);
+    public Encoder feignEncoder() {
+        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
+        ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
+
+        return new SpringEncoder(objectFactory);
     }
 
 }

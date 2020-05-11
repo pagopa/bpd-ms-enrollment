@@ -2,6 +2,7 @@ package it.gov.pagopa.bpd.enrollment.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import it.gov.pagopa.bpd.common.annotation.UpperCase;
 import it.gov.pagopa.bpd.common.util.Constants;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
@@ -45,7 +46,7 @@ public interface BpdEnrollmentController {
     @ResponseStatus(HttpStatus.OK)
     CitizenResource enrollCitizenHB(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
-            @PathVariable("id")
+            @PathVariable("id") @UpperCase
             @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
                     String fiscalCode,
             @RequestBody @Valid CitizenDto request

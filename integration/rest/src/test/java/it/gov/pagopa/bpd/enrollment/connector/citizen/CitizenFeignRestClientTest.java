@@ -59,19 +59,12 @@ public class CitizenFeignRestClientTest {
     }
 
     @Configuration
-    @ImportAutoConfiguration({
-//            HttpMessageConvertersAutoConfiguration.class,
-            FeignAutoConfiguration.class})
+    @ImportAutoConfiguration(FeignAutoConfiguration.class)
     static class ContextConfiguration {
-//        @Bean
-//        ServletWebServerFactory servletWebServerFactory() {
-//            return new TomcatServletWebServerFactory();
-//        }
     }
 
 
     @Autowired
-//    private ObjectMapper om = new ArchConfiguration().objectMapper();
     private ObjectMapper objectMapper;
 
     @Autowired

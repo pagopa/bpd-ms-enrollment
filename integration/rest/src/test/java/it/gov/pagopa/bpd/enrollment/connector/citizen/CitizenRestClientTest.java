@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.gov.pagopa.bpd.common.connector.BaseFeignRestClientTest;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.config.CitizenRestConnectorConfig;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.OffsetDateTime;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.lang.String.format;
@@ -23,7 +25,7 @@ import static org.junit.Assert.assertEquals;
         locations = "classpath:config/citizen/rest-client.properties",
         properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
 @Import({CitizenRestConnectorConfig.class})
-public class CitizenFeignRestClientTest extends BaseFeignRestClientTest {
+public class CitizenRestClientTest extends BaseFeignRestClientTest {
 
     static {
         // set with the env var name related to rest client service port
@@ -34,7 +36,7 @@ public class CitizenFeignRestClientTest extends BaseFeignRestClientTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private CitizenFeignRestClient restClient;
+    private CitizenRestClient restClient;
 
 
     @Test
@@ -59,8 +61,28 @@ public class CitizenFeignRestClientTest extends BaseFeignRestClientTest {
     }
 
     @Test
-    public void update() {
-    }
+    public void update() throws IOException {
+        final String fiscalCode = "fiscalCode1";
 
+        InputStream mockedJson = getClass()
+                .getClassLoader()
+                .getResourceAsStream(format("citizen/citizen_%s.json", fiscalCode));
+
+        final JsonNode jsonNode = objectMapper.readTree(mockedJson);
+
+        stubFor(put(urlEqualTo("/bpd/citizens/" + fiscalCode))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .withBody(jsonNode.toString())));
+
+
+        CitizenDto request = new CitizenDto();
+        request.setTimestampTC(OffsetDateTime.now());
+        final CitizenResource actualResponse = restClient.update(fiscalCode, request);
+
+        assertEquals(jsonNode, objectMapper.valueToTree(actualResponse));
+
+    }
 
 }

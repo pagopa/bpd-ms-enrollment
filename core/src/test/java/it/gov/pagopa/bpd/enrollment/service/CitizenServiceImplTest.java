@@ -1,6 +1,6 @@
 package it.gov.pagopa.bpd.enrollment.service;
 
-import it.gov.pagopa.bpd.enrollment.connector.citizen.CitizenRestClient;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.CitizenFeignRestClient;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 public class CitizenServiceImplTest {
 
     @MockBean
-    private CitizenRestClient restClientMock;
+    private CitizenFeignRestClient restClientMock;
 
     @Autowired
     private CitizenServiceImpl citizenService;

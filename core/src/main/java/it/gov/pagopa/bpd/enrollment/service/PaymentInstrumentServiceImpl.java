@@ -24,7 +24,7 @@ class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrum
 
     @Override
     public PaymentInstrumentResource update(String hpan, PaymentInstrumentDto paymentInstrument) {
-        return restClient.update(hpan, paymentInstrument);
+        return restClient.update(paymentInstrument, hpan);
     }
 
 }

@@ -33,11 +33,11 @@ public class PaymentInstrumentServiceImplTest {
 
     @PostConstruct
     public void configureMock() {
-        BDDMockito.when(restClientMock.update(Mockito.any(String.class), Mockito.any(PaymentInstrumentDto.class)))
+        BDDMockito.when(restClientMock.update(Mockito.any(PaymentInstrumentDto.class), Mockito.any(String.class)))
                 .thenAnswer(invocation -> {
-                    PaymentInstrumentDto dtoArgument = invocation.getArgument(1, PaymentInstrumentDto.class);
+                    PaymentInstrumentDto dtoArgument = invocation.getArgument(0, PaymentInstrumentDto.class);
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
-                    result.setHpan(invocation.getArgument(0));
+                    result.setHpan(invocation.getArgument(1));
                     result.setActivationDate(dtoArgument.getActivationDate());
                     result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
                     result.setFiscalCode(dtoArgument.getFiscalCode());
@@ -56,8 +56,8 @@ public class PaymentInstrumentServiceImplTest {
 
         PaymentInstrumentResource updated = paymentInstrumentService.update(hashPan, dto);
 
-        verify(restClientMock, only()).update(eq(hashPan), eq(dto));
-        verify(restClientMock, times(1)).update(eq(hashPan), eq(dto));
+        verify(restClientMock, only()).update(eq(dto), eq(hashPan));
+        verify(restClientMock, times(1)).update(eq(dto), eq(hashPan));
         assertEquals(hashPan, updated.getHpan());
         assertEquals(dto.getActivationDate(), updated.getActivationDate());
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, updated.getStatus());

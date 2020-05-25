@@ -1,14 +1,14 @@
 {
   "request": {
     "method": "GET",
-    "url": ""
+    "urlPath": "/bpd/citizens/fiscalCode"
   },
   "response": {
     "status": "200",
     "jsonBody": {
       "enabled": true,
-      "fiscalCode": "prova",
-      "timestampTc": "2020-04-17T10:23:00.749Z"
+      "fiscalCode": "fiscalCode",
+      "timestampTC": "2020-04-17T12:23:00.749+02:00"
     },
     "headers": {
       "Content-Type": "application/json"

@@ -1,88 +1,78 @@
 package it.gov.pagopa.bpd.enrollment.connector.citizen;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import it.gov.pagopa.bpd.common.connector.BaseFeignRestClientTest;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.config.CitizenRestConnectorConfig;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
+import lombok.SneakyThrows;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.OffsetDateTime;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static java.lang.String.format;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @TestPropertySource(
         locations = "classpath:config/citizen/rest-client.properties",
         properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
-@Import({CitizenRestConnectorConfig.class})
+@ContextConfiguration(initializers = CitizenRestClientTest.RandomPortInitializer.class,
+        classes = CitizenRestConnectorConfig.class)
 public class CitizenRestClientTest extends BaseFeignRestClientTest {
 
-    static {
-        // set with the env var name related to rest client service port
-        SERIVICE_PORT_ENV_VAR_NAME = "BPD_CITIZEN_PORT";
-    }
+    //    @SuppressWarnings("unchecked")
+    @ClassRule
+    public static WireMockClassRule wireMockRule = new WireMockClassRule(wireMockConfig()
+            .dynamicPort()
+            .usingFilesUnderClasspath("stubs/citizen")
+//            .extensions(ResponseTemplateTransformer.class)
+    );
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Test
+    public void findById() {
+        final String fiscalCode = "fiscalCode";
+
+        final CitizenResource actualResponse = restClient.findById(fiscalCode);
+
+        assertNotNull(actualResponse);
+        assertEquals(fiscalCode, actualResponse.getFiscalCode());
+    }
 
     @Autowired
     private CitizenRestClient restClient;
 
-
     @Test
-    public void findById() throws IOException {
-        final String fiscalCode = "fiscalCode1";
-
-        InputStream mockedJson = getClass()
-                .getClassLoader()
-                .getResourceAsStream(format("citizen/citizen_%s.json", fiscalCode));
-
-        final JsonNode jsonNode = objectMapper.readTree(mockedJson);
-
-        stubFor(get(urlEqualTo("/bpd/citizens/" + fiscalCode))
-                .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .withBody(jsonNode.toString())));
-
-        final CitizenResource actualResponse = restClient.findById(fiscalCode);
-
-        assertEquals(jsonNode, objectMapper.valueToTree(actualResponse));
-    }
-
-    @Test
-    public void update() throws IOException {
-        final String fiscalCode = "fiscalCode1";
-
-        InputStream mockedJson = getClass()
-                .getClassLoader()
-                .getResourceAsStream(format("citizen/citizen_%s.json", fiscalCode));
-
-        final JsonNode jsonNode = objectMapper.readTree(mockedJson);
-
-        stubFor(put(urlEqualTo("/bpd/citizens/" + fiscalCode))
-                .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .withBody(jsonNode.toString())));
-
-
+    public void update() {
+        final String fiscalCode = "fiscalCode";
         CitizenDto request = new CitizenDto();
-        request.setTimestampTC(OffsetDateTime.now());
+        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
+
         final CitizenResource actualResponse = restClient.update(fiscalCode, request);
 
-        assertEquals(jsonNode, objectMapper.valueToTree(actualResponse));
+        assertNotNull(actualResponse);
+        assertEquals(fiscalCode, actualResponse.getFiscalCode());
+        assertEquals(request.getTimestampTC(), actualResponse.getTimestampTC());
+    }
 
+    public static class RandomPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        @SneakyThrows
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertySourceUtils
+                    .addInlinedPropertiesToEnvironment(applicationContext,
+                            String.format("rest-client.citizen.base-url=http://%s:%d/bpd/citizens",
+                                    wireMockRule.getOptions().bindAddress(),
+                                    wireMockRule.port())
+                    );
+        }
     }
 
 }

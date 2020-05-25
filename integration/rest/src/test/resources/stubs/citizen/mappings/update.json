@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPath": "/bpd/citizens/fiscalCode",
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "timestampTC": "2020-04-17T12:23:00.749+02:00"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": "200",
+    "jsonBody": {
+      "enabled": true,
+      "fiscalCode": "fiscalCode",
+      "timestampTC": "2020-04-17T12:23:00.749+02:00"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

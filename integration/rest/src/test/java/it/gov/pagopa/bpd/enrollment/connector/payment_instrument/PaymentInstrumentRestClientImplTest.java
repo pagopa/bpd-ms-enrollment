@@ -1,69 +1,69 @@
 package it.gov.pagopa.bpd.enrollment.connector.payment_instrument;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import it.gov.pagopa.bpd.common.connector.BaseFeignRestClientTest;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.config.PaymentInstrumentRestConnectorConfig;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
+import lombok.SneakyThrows;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.OffsetDateTime;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static java.lang.String.format;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @TestPropertySource(
         locations = "classpath:config/payment_instrument/rest-client.properties",
         properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
-@Import({PaymentInstrumentRestConnectorConfig.class})
+@ContextConfiguration(initializers = PaymentInstrumentRestClientImplTest.RandomPortInitializer.class,
+        classes = PaymentInstrumentRestConnectorConfig.class)
 public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest {
 
-    static {
-        // set with the env var name related to rest client service port
-        SERIVICE_PORT_ENV_VAR_NAME = "BPD_PAYMENT_INSTRUMENT_PORT";
-    }
+    //    @SuppressWarnings("unchecked")
+    @ClassRule
+    public static WireMockClassRule wireMockRule = new WireMockClassRule(wireMockConfig()
+            .dynamicPort()
+            .usingFilesUnderClasspath("stubs/payment-instrument")
+//            .extensions(ResponseTemplateTransformer.class)
+    );
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Test
+    public void update() {
+        PaymentInstrumentDto request = new PaymentInstrumentDto();
+        request.setActivationDate(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
+        request.setFiscalCode("fiscalCode");
+
+        final String hpan = "hpan";
+        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
+
+        assertNotNull(actualResponse);
+        assertEquals(hpan, actualResponse.getHpan());
+        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
+        assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
+    }
 
     @Autowired
     private PaymentInstrumentRestClient restClient;
 
-    private HttpStatus httpStatus;
-
-    @Test
-    public void update() throws IOException {
-        final String hpan = "hpan1";
-        final String fiscalCode = "fiscalCode";
-
-        InputStream mockedJson = getClass()
-                .getClassLoader()
-                .getResourceAsStream(format("payment_instrument/paymentInstrument_%s.json", hpan));
-
-        final JsonNode jsonNode = objectMapper.readTree(mockedJson);
-
-        stubFor(put(urlEqualTo("/bpd/payment-instruments/" + hpan))
-                .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .withBody(jsonNode.toString())));
-
-
-        PaymentInstrumentDto request = new PaymentInstrumentDto();
-        request.setActivationDate(OffsetDateTime.now());
-        request.setFiscalCode(fiscalCode);
-        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
-
-        assertEquals(jsonNode, objectMapper.valueToTree(actualResponse));
-
+    public static class RandomPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        @SneakyThrows
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertySourceUtils
+                    .addInlinedPropertiesToEnvironment(applicationContext,
+                            String.format("rest-client.payment-instrument.base-url=http://%s:%d/bpd/payment-instruments",
+                                    wireMockRule.getOptions().bindAddress(),
+                                    wireMockRule.port())
+                    );
+        }
     }
 }

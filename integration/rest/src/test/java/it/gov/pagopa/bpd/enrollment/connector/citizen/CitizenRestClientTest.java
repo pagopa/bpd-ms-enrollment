@@ -1,5 +1,6 @@
 package it.gov.pagopa.bpd.enrollment.connector.citizen;
 
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import it.gov.pagopa.bpd.common.connector.BaseFeignRestClientTest;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.config.CitizenRestConnectorConfig;
@@ -28,12 +29,12 @@ import static org.junit.Assert.assertNotNull;
         classes = CitizenRestConnectorConfig.class)
 public class CitizenRestClientTest extends BaseFeignRestClientTest {
 
-    //    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @ClassRule
     public static WireMockClassRule wireMockRule = new WireMockClassRule(wireMockConfig()
             .dynamicPort()
             .usingFilesUnderClasspath("stubs/citizen")
-//            .extensions(ResponseTemplateTransformer.class)
+            .extensions(new ResponseTemplateTransformer(false))
     );
 
     @Test

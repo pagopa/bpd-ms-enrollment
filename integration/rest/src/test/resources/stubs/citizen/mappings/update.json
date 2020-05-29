@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "PUT",
-    "urlPath": "/bpd/citizens/fiscalCode",
+    "urlPathPattern": "/bpd/citizens/(\\w*)",
     "bodyPatterns": [
       {
         "equalToJson": {
@@ -14,11 +14,14 @@
     "status": "200",
     "jsonBody": {
       "enabled": true,
-      "fiscalCode": "fiscalCode",
-      "timestampTC": "2020-04-17T12:23:00.749+02:00"
+      "fiscalCode": "{{request.path.[2]}}",
+      "timestampTC": "{{jsonPath request.body '$.timestampTC'}}"
     },
     "headers": {
       "Content-Type": "application/json"
-    }
+    },
+    "transformers": [
+      "response-template"
+    ]
   }
 }

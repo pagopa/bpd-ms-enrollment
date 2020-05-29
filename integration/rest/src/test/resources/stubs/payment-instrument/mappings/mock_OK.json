@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "PUT",
-    "urlPath": "/bpd/payment-instruments/hpan",
+    "urlPathPattern": "/bpd/payment-instruments/(\\w*)",
     "bodyPatterns": [
       {
         "equalToJson": {
@@ -15,12 +15,15 @@
     "status": "200",
     "jsonBody": {
       "status": "ACTIVE",
-      "fiscalCode": "fiscalCode",
-      "hpan": "hpan",
-      "activationDate": "2020-04-17T12:23:00.749+02:00"
+      "fiscalCode": "{{jsonPath request.body '$.fiscalCode'}}",
+      "hpan": "{{request.path.[2]}}",
+      "activationDate": "{{jsonPath request.body '$.activationDate'}}"
     },
     "headers": {
       "Content-Type": "application/json"
-    }
+    },
+    "transformers": [
+      "response-template"
+    ]
   }
 }

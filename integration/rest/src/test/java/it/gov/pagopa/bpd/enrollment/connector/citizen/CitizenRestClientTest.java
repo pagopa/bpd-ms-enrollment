@@ -29,7 +29,6 @@ import static org.junit.Assert.assertNotNull;
         classes = CitizenRestConnectorConfig.class)
 public class CitizenRestClientTest extends BaseFeignRestClientTest {
 
-    @SuppressWarnings("unchecked")
     @ClassRule
     public static WireMockClassRule wireMockRule = new WireMockClassRule(wireMockConfig()
             .dynamicPort()

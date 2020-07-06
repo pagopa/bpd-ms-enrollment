@@ -17,3 +17,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: eventhub-logging
+            - configMapRef:
+                name: rest-client

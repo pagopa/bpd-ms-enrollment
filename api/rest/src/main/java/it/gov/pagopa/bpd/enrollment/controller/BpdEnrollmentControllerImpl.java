@@ -13,8 +13,6 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.Size;
-
 /**
  * @see BpdEnrollmentController
  */
@@ -37,26 +35,23 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public CitizenResource enrollCitizenIO(CitizenDto request) {
+    public CitizenResource enrollCitizenIO(String fiscalCode, CitizenDto request) {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenIO");
             logger.debug(String.format("request = [%s]", request));
         }
-
-        @Size(max = 16) String fiscalCode = "test";//TODO: get fiscal code from auth token
 
         return citizenService.update(fiscalCode, request);
     }
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentPaymentInstrumentDto request) throws Exception {
+    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, String fiscalCode, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentIO");
             logger.debug("hashPan = [" + hashPan + "], request = [" + request + "]");
         }
 
-        String fiscalCode = "DH5IVD85M84D048L";//FIXME: get fiscal code from token
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
         paymentInstrumentDTO.setFiscalCode(fiscalCode);
 

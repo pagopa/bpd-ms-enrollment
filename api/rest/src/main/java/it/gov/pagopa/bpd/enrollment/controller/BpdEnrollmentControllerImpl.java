@@ -38,7 +38,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
     public CitizenResource enrollCitizenIO(String fiscalCode, CitizenDto request) {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenIO");
-            logger.debug(String.format("request = [%s]", request));
+            logger.debug(String.format("fiscalCode = %s, request = %s", fiscalCode, request));
         }
 
         return citizenService.update(fiscalCode, request);
@@ -49,7 +49,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
     public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, String fiscalCode, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentIO");
-            logger.debug("hashPan = [" + hashPan + "], request = [" + request + "]");
+            logger.debug(String.format("hashPan = %s, fiscalCode = %s, request = %s", hashPan, fiscalCode, request));
         }
 
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
@@ -64,7 +64,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
     public CitizenResource enrollCitizenHB(String fiscalCode, CitizenDto request) {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenHB");
-            logger.debug("fiscalCode = [" + fiscalCode + "], request = [" + request + "]");
+            logger.debug(String.format("fiscalCode = [%s], request = [%s]", fiscalCode, request));
         }
 
         return citizenService.update(fiscalCode, request);
@@ -75,7 +75,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
     public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, PaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentHB");
-            logger.debug(String.format("request = [%s]", request));
+            logger.debug(String.format("hashPan = %s, request = %s", hashPan, request));
         }
 
         return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request)

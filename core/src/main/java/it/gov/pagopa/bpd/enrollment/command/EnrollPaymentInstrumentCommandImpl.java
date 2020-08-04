@@ -41,7 +41,6 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
         final CitizenResource citizen = citizenService.findById(paymentInstrumentDTO.getFiscalCode());
         if (citizen.isEnabled()) {
             paymentInstrumentResource = paymentInstrumentService.update(hashPan, paymentInstrumentDTO);
-
         } else {
             throw new CitizenNotEnabledException(paymentInstrumentDTO.getFiscalCode());
         }

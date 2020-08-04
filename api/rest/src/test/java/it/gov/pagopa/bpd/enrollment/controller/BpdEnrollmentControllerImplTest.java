@@ -6,6 +6,7 @@ import eu.sia.meda.error.config.LocalErrorConfig;
 import eu.sia.meda.error.handler.MedaExceptionHandler;
 import eu.sia.meda.error.service.impl.LocalErrorManagerServiceImpl;
 import it.gov.pagopa.bpd.common.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
@@ -64,6 +65,9 @@ public class BpdEnrollmentControllerImplTest {
 
     @MockBean
     private EnrollPaymentInstrumentCommand paymentInstrumentCommandMock;
+
+    @MockBean
+    private DeleteEnrolledCitizenCommand deleteEnrolledCitizenCommandMock;
 
     @MockBean
     private CitizenService citizenService;
@@ -320,5 +324,44 @@ public class BpdEnrollmentControllerImplTest {
 
         verifyZeroInteractions(citizenService);
     }
+
+    @Test
+    public void deleteByFiscalCode_OK() throws Exception {
+        final String fiscalCode = "DHFIVD85M84D048L";
+        CitizenDto request = new CitizenDto();
+        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
+
+        BDDMockito.doReturn(true).when(deleteEnrolledCitizenCommandMock).execute();
+
+        mvc.perform(MockMvcRequestBuilders
+                .delete("/bpd/citizen/" + fiscalCode)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn();
+
+        verify(deleteEnrolledCitizenCommandMock, times(1)).execute();
+
+    }
+
+    @Test
+    public void deleteByFiscalCode_KO() throws Exception {
+        final String fiscalCode = "DHFIVD85M84D048L";
+        CitizenDto request = new CitizenDto();
+        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
+
+        BDDMockito.doReturn(false).when(deleteEnrolledCitizenCommandMock).execute();
+
+        mvc.perform(MockMvcRequestBuilders
+                .delete("/bpd/citizen/" + fiscalCode)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError())
+                .andReturn();
+
+        verify(deleteEnrolledCitizenCommandMock, times(1)).execute();
+
+    }
+
 
 }

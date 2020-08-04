@@ -32,4 +32,9 @@ class CitizenServiceImpl extends BaseService implements CitizenService {
     public CitizenResource update(String fiscalCode, CitizenDto dto) {
         return restClient.update(fiscalCode, dto);
     }
+
+    @Override
+    public void delete(String fiscalCode) {
+        restClient.delete(fiscalCode);
+    }
 }

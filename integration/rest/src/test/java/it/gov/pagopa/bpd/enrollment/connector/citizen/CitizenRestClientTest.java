@@ -62,6 +62,11 @@ public class CitizenRestClientTest extends BaseFeignRestClientTest {
         assertEquals(request.getTimestampTC(), actualResponse.getTimestampTC());
     }
 
+    @Test
+    public void delete() {
+        restClient.delete("test");
+    }
+
     public static class RandomPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         @SneakyThrows
         @Override

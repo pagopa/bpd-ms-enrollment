@@ -22,4 +22,8 @@ public interface CitizenRestClient {
     @PutMapping(value = "${rest-client.citizen.update.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     CitizenResource update(@NotBlank @PathVariable("id") String fiscalCode, @RequestBody @Valid CitizenDto dto);
+
+    @DeleteMapping(value = "${rest-client.citizen.delete.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    void delete(@NotBlank @PathVariable("id") String fiscalCode);
 }

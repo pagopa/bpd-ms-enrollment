@@ -10,4 +10,6 @@ public interface PaymentInstrumentService {
 
     PaymentInstrumentResource update(String hpan, PaymentInstrumentDto paymentInstrument);
 
+    void deleteByFiscalCode(String fiscalCode);
+
 }

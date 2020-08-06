@@ -2,6 +2,7 @@ package it.gov.pagopa.bpd.enrollment.controller;
 
 import eu.sia.meda.core.controller.StatelessController;
 import it.gov.pagopa.bpd.common.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
@@ -46,14 +47,13 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, String fiscalCode, EnrollmentPaymentInstrumentDto request) throws Exception {
+    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentIO");
-            logger.debug(String.format("hashPan = %s, fiscalCode = %s, request = %s", hashPan, fiscalCode, request));
+            logger.debug(String.format("hashPan = %s, request = %s", hashPan, request));
         }
 
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
-        paymentInstrumentDTO.setFiscalCode(fiscalCode);
 
         return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)
                 .execute();
@@ -72,14 +72,31 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, PaymentInstrumentDto request) throws Exception {
+    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentHB");
             logger.debug(String.format("hashPan = %s, request = %s", hashPan, request));
         }
 
-        return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request)
+        final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
+
+        return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)
                 .execute();
+
+    }
+
+    @Override
+    public void deleteCitizen(String fiscalCode) throws Exception {
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("BpdEnrollmentControllerImpl.deleteCitizen");
+            logger.debug(String.format("fiscalCode = %s", fiscalCode));
+        }
+
+        if (!beanFactory.getBean(DeleteEnrolledCitizenCommand.class, fiscalCode).execute()) {
+            throw new Exception("Uncapable to complete citizen deletion");
+        }
+
     }
 
 }

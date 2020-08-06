@@ -78,6 +78,7 @@ public class BpdEnrollmentControllerImplTest {
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
+        request.setFiscalCode(fiscalCode);
 
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
@@ -94,7 +95,6 @@ public class BpdEnrollmentControllerImplTest {
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPan)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .header("x-fiscal-code", fiscalCode)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
@@ -125,7 +125,6 @@ public class BpdEnrollmentControllerImplTest {
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPanValue)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .header("x-fiscal-code", fiscalCode)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn();
@@ -138,6 +137,7 @@ public class BpdEnrollmentControllerImplTest {
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
+        request.setFiscalCode(fiscalCode);
 
         BDDMockito.willThrow(new CitizenNotEnabledException("pippo"))
                 .given(paymentInstrumentCommandMock).execute();
@@ -146,7 +146,6 @@ public class BpdEnrollmentControllerImplTest {
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPan)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .header("x-fiscal-code", fiscalCode)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
@@ -160,7 +159,7 @@ public class BpdEnrollmentControllerImplTest {
     public void enrollPaymentInstrumentHB_OK() throws Exception {
         final String hashPan = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
-        PaymentInstrumentDto request = new PaymentInstrumentDto();
+        EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setFiscalCode(fiscalCode);
         request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
@@ -185,6 +184,8 @@ public class BpdEnrollmentControllerImplTest {
         PaymentInstrumentResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PaymentInstrumentResource.class);
 
+        verify(paymentInstrumentFactoryMock, only()).apply(eq(request));
+        verify(paymentInstrumentFactoryMock, times(1)).apply(eq(request));
         verify(paymentInstrumentCommandMock, only()).execute();
         verify(paymentInstrumentCommandMock, times(1)).execute();
 
@@ -193,8 +194,6 @@ public class BpdEnrollmentControllerImplTest {
         assertEquals(request.getFiscalCode(), result.getFiscalCode());
         assertEquals(request.getActivationDate(), result.getActivationDate());
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
-
-        verifyZeroInteractions(paymentInstrumentFactoryMock);
     }
 
 
@@ -232,10 +231,9 @@ public class BpdEnrollmentControllerImplTest {
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
-                .put(URL_TEMPLATE_PREFIX + "/io/citizen")
+                .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .header("x-fiscal-code", fiscalCode)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
@@ -258,10 +256,9 @@ public class BpdEnrollmentControllerImplTest {
         request.setTimestampTC(null);
 
         mvc.perform(MockMvcRequestBuilders
-                .put(URL_TEMPLATE_PREFIX + "/io/citizen")
+                .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .header("x-fiscal-code", fiscalCode)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();

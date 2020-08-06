@@ -46,14 +46,13 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, String fiscalCode, EnrollmentPaymentInstrumentDto request) throws Exception {
+    public PaymentInstrumentResource enrollPaymentInstrumentIO(String hashPan, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentIO");
-            logger.debug(String.format("hashPan = %s, fiscalCode = %s, request = %s", hashPan, fiscalCode, request));
+            logger.debug(String.format("hashPan = %s, request = %s", hashPan, request));
         }
 
         final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
-        paymentInstrumentDTO.setFiscalCode(fiscalCode);
 
         return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)
                 .execute();
@@ -72,13 +71,15 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, PaymentInstrumentDto request) throws Exception {
+    public PaymentInstrumentResource enrollPaymentInstrumentHB(String hashPan, EnrollmentPaymentInstrumentDto request) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollPaymentInstrumentHB");
             logger.debug(String.format("hashPan = %s, request = %s", hashPan, request));
         }
 
-        return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, request)
+        final PaymentInstrumentDto paymentInstrumentDTO = paymentInstrumentFactory.apply(request);
+
+        return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)
                 .execute();
     }
 

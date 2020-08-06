@@ -14,8 +14,6 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * @see BpdEnrollmentController
  */
@@ -88,7 +86,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
     }
 
     @Override
-    public void deleteCitizen(@NotBlank String fiscalCode) throws Exception {
+    public void deleteCitizen(String fiscalCode) throws Exception {
 
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.deleteCitizen");

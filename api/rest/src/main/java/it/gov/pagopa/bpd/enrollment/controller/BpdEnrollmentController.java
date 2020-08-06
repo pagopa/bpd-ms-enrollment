@@ -29,11 +29,7 @@ public interface BpdEnrollmentController {
 
     @PutMapping(value = "io/citizen", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    CitizenResource enrollCitizenIO(
-            @RequestHeader("x-fiscal-code") @UpperCase
-            @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode,
-            @RequestBody @Valid CitizenDto request);
+    CitizenResource enrollCitizenIO(@RequestBody @Valid CitizenDto request);
 
 
     @PutMapping(value = "/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -43,9 +39,6 @@ public interface BpdEnrollmentController {
             @PathVariable("id")
             @NotBlank
                     String hashPan,
-            @RequestHeader("x-fiscal-code") @UpperCase
-            @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode,
             @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
 

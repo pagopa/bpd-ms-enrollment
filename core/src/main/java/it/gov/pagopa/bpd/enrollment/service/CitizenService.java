@@ -12,4 +12,6 @@ public interface CitizenService {
 
     CitizenResource update(String fiscalCode, CitizenDto dto);
 
+    void delete(String fiscalCode);
+
 }

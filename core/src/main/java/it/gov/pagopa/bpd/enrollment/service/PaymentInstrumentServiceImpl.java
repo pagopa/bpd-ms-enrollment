@@ -27,4 +27,9 @@ class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrum
         return restClient.update(paymentInstrument, hpan);
     }
 
+    @Override
+    public void deleteByFiscalCode(String fiscalCode) {
+        restClient.deleteByFiscalCode(fiscalCode);
+    }
+
 }

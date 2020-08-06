@@ -22,11 +22,11 @@ import javax.validation.constraints.Size;
  * Controller to expose MicroService
  */
 @Api(tags = "Bonus Pagamenti Digitali enrollment Controller")
-@RequestMapping("/bpd/enrollment")
+@RequestMapping("/bpd")
 @Validated
 public interface BpdEnrollmentController {
 
-    @PutMapping(value = "io/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/io/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     CitizenResource enrollCitizenIO(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
@@ -36,7 +36,7 @@ public interface BpdEnrollmentController {
             @RequestBody @Valid CitizenDto request);
 
 
-    @PutMapping(value = "/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     PaymentInstrumentResource enrollPaymentInstrumentIO(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
@@ -46,7 +46,7 @@ public interface BpdEnrollmentController {
             @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
 
-    @PutMapping(value = "hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     CitizenResource enrollCitizenHB(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
@@ -57,7 +57,7 @@ public interface BpdEnrollmentController {
     );
 
 
-    @PutMapping(value = "/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     PaymentInstrumentResource enrollPaymentInstrumentHB(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
@@ -65,5 +65,12 @@ public interface BpdEnrollmentController {
             @NotBlank
                     String hashPan,
             @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
+
+    @DeleteMapping(value = "citizen/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteCitizen(
+            @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
+            @PathVariable("id")
+            @NotBlank String fiscalCode) throws Exception;
 
 }

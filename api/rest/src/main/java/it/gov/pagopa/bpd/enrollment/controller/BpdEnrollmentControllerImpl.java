@@ -2,6 +2,7 @@ package it.gov.pagopa.bpd.enrollment.controller;
 
 import eu.sia.meda.core.controller.StatelessController;
 import it.gov.pagopa.bpd.common.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
@@ -12,6 +13,8 @@ import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @see BpdEnrollmentController
@@ -81,6 +84,21 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
         return beanFactory.getBean(EnrollPaymentInstrumentCommand.class, hashPan, paymentInstrumentDTO)
                 .execute();
+
+    }
+
+    @Override
+    public void deleteCitizen(@NotBlank String fiscalCode) throws Exception {
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("BpdEnrollmentControllerImpl.deleteCitizen");
+            logger.debug(String.format("fiscalCode = %s", fiscalCode));
+        }
+
+        if (!beanFactory.getBean(DeleteEnrolledCitizenCommand.class, fiscalCode).execute()) {
+            throw new Exception("Uncapable to complete citizen deletion");
+        }
+
     }
 
 }

@@ -51,6 +51,12 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
         assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
     }
 
+    @Test
+    public void deleteByFiscalCode() {
+        restClient.deleteByFiscalCode("test");
+    }
+
+
     @Autowired
     private PaymentInstrumentRestClient restClient;
 

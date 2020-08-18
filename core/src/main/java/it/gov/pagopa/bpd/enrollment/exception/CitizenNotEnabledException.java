@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class CitizenNotEnabledException extends MedaDomainRuntimeException {
 
     public CitizenNotEnabledException(String fiscalCode) {
-        super(getMessage("Citizen", fiscalCode), "user.not-enabled.error", HttpStatus.UNAUTHORIZED);
+        super(getMessage("Citizen", fiscalCode), "user.not-enabled.error", HttpStatus.FORBIDDEN);
     }
 
     private static String getMessage(String resourceClass, Object id) {

@@ -1,11 +1,16 @@
 package it.gov.pagopa.bpd.enrollment.exception;
 
-import it.gov.pagopa.bpd.common.exception.ResourceNotEnabledException;
+import eu.sia.meda.exceptions.MedaDomainRuntimeException;
+import org.springframework.http.HttpStatus;
 
-public class CitizenNotEnabledException extends ResourceNotEnabledException {
+public class CitizenNotEnabledException extends MedaDomainRuntimeException {
 
-    public CitizenNotEnabledException(String id) {
-        super("Citizen", id);
+    public CitizenNotEnabledException(String fiscalCode) {
+        super(getMessage("Citizen", fiscalCode), "user.not-enabled.error", HttpStatus.UNAUTHORIZED);
+    }
+
+    private static String getMessage(String resourceClass, Object id) {
+        return String.format("T&C NOT ACCEPTED", resourceClass, id);
     }
 
 }

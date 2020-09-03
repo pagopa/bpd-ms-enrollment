@@ -235,7 +235,7 @@ public class BpdEnrollmentControllerImplTest {
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
-                .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
+                .put("/bpd/io/enrollment/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(objectMapper.writeValueAsString(request)))

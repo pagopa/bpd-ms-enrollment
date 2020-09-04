@@ -81,14 +81,13 @@ public class BpdEnrollmentControllerImplTest {
         final String hashPan = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
-        request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
         request.setFiscalCode(fiscalCode);
 
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
                     result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
-                    result.setActivationDate(request.getActivationDate());
+                    result.setActivationDate(CURRENT_OFFSET_DATE_TIME);
                     result.setHpan(hashPan);
                     result.setFiscalCode(fiscalCode);
 
@@ -113,7 +112,7 @@ public class BpdEnrollmentControllerImplTest {
         assertNotNull(result);
         assertEquals(hashPan, result.getHpan());
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getActivationDate(), result.getActivationDate());
+        assertEquals(CURRENT_OFFSET_DATE_TIME, result.getActivationDate());
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
     }
 
@@ -123,7 +122,7 @@ public class BpdEnrollmentControllerImplTest {
         final String hashPanValue = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
-        request.setActivationDate(null);
+        request.setFiscalCode(null);
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPanValue)
@@ -140,7 +139,6 @@ public class BpdEnrollmentControllerImplTest {
         final String hashPan = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
-        request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
         request.setFiscalCode(fiscalCode);
 
         BDDMockito.willThrow(new CitizenNotEnabledException("pippo"))
@@ -165,13 +163,12 @@ public class BpdEnrollmentControllerImplTest {
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setFiscalCode(fiscalCode);
-        request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
                     result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
-                    result.setActivationDate(request.getActivationDate());
+                    result.setActivationDate(CURRENT_OFFSET_DATE_TIME);
                     result.setHpan(hashPan);
                     result.setFiscalCode(fiscalCode);
 
@@ -196,7 +193,7 @@ public class BpdEnrollmentControllerImplTest {
         assertNotNull(result);
         assertEquals(hashPan, result.getHpan());
         assertEquals(request.getFiscalCode(), result.getFiscalCode());
-        assertEquals(request.getActivationDate(), result.getActivationDate());
+        assertEquals(CURRENT_OFFSET_DATE_TIME, result.getActivationDate());
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
     }
 
@@ -204,10 +201,7 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void enrollPaymentInstrumentHB_BadRequest() throws Exception {
         final String hashPan = "hashPan";
-        final String fiscalCode = "DHFIVD85M84D048L";
-        PaymentInstrumentDto request = new PaymentInstrumentDto();
-        request.setFiscalCode(fiscalCode);
-        request.setActivationDate(null);
+        EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/payment-instruments/" + hashPan)
@@ -222,34 +216,28 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void enrollCitizenIO_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
-        when(citizenService.update(anyString(), any(CitizenDto.class)))
+        when(citizenService.enroll(anyString()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
-                    result.setTimestampTC(invocation.getArgument(1, CitizenDto.class).getTimestampTC());
-
                     return result;
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put("/bpd/io/enrollment/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).update(eq(fiscalCode), eq(request));
-        verify(citizenService, times(1)).update(eq(fiscalCode), eq(request));
+        verify(citizenService, only()).enroll(eq(fiscalCode));
+        verify(citizenService, times(1)).enroll(eq(fiscalCode));
 
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getTimestampTC(), result.getTimestampTC());
     }
 
 
@@ -274,34 +262,28 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void enrollCitizenHB_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
-        when(citizenService.update(anyString(), any(CitizenDto.class)))
+        when(citizenService.enroll(anyString()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
-                    result.setTimestampTC(invocation.getArgument(1, CitizenDto.class).getTimestampTC());
-
                     return result;
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).update(eq(fiscalCode), eq(request));
-        verify(citizenService, times(1)).update(eq(fiscalCode), eq(request));
+        verify(citizenService, only()).enroll(eq(fiscalCode));
+        verify(citizenService, times(1)).enroll(eq(fiscalCode));
 
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getTimestampTC(), result.getTimestampTC());
     }
 
 

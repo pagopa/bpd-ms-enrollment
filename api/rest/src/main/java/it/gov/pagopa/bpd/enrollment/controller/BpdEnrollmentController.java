@@ -32,8 +32,7 @@ public interface BpdEnrollmentController {
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
             @PathVariable("id") @UpperCase
             @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode,
-            @RequestBody @Valid CitizenDto request);
+                    String fiscalCode);
 
 
     @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -52,8 +51,7 @@ public interface BpdEnrollmentController {
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
             @PathVariable("id") @UpperCase
             @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode,
-            @RequestBody @Valid CitizenDto request
+                    String fiscalCode
     );
 
 

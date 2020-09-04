@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,7 +73,6 @@ public class EnrollCitizenCommandImplTest {
     public void doExecuteOK() {
         final PaymentInstrumentDto dto = new PaymentInstrumentDto();
         dto.setFiscalCode(FISCAL_CODE);
-        dto.setActivationDate(CURRENT_DATE_TIME);
 
         EnrollPaymentInstrumentCommandImpl enrollPaymentInstrumentCommand =
                 beanFactory.getBean(EnrollPaymentInstrumentCommandImpl.class, HASH_PAN, dto);
@@ -83,7 +83,7 @@ public class EnrollCitizenCommandImplTest {
         verify(paymentInstrumentService, only()).update(eq(HASH_PAN), eq(dto));
         verify(paymentInstrumentService, times(1)).update(eq(HASH_PAN), eq(dto));
         assertEquals(HASH_PAN, enrolled.getHpan());
-        assertEquals(CURRENT_DATE_TIME, enrolled.getActivationDate());
+        assertEquals(CURRENT_DATE_TIME.truncatedTo(ChronoUnit.DAYS), enrolled.getActivationDate().truncatedTo(ChronoUnit.DAYS));
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, enrolled.getStatus());
         assertEquals(dto.getFiscalCode(), enrolled.getFiscalCode());
     }

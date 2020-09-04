@@ -10,7 +10,7 @@ public interface CitizenService {
 
     CitizenResource findById(String fiscalCode);
 
-    CitizenResource update(String fiscalCode, CitizenDto dto);
+    CitizenResource enroll(String fiscalCode);
 
     void delete(String fiscalCode);
 

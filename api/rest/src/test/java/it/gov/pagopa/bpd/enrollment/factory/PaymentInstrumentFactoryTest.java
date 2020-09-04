@@ -32,14 +32,11 @@ public class PaymentInstrumentFactoryTest {
         PaymentInstrumentDto expectedOutput;
 
         input = new EnrollmentPaymentInstrumentDto();
-        input.setActivationDate(OFFSET_DATE_TIME);
         expectedOutput = new PaymentInstrumentDto();
-        expectedOutput.setActivationDate(input.getActivationDate());
         expectedOutput.setFiscalCode(null);
         params.add(new Object[]{input, expectedOutput});
 
         input = new EnrollmentPaymentInstrumentDto();
-        input.setActivationDate(null);
         expectedOutput = new PaymentInstrumentDto();
         expectedOutput.setActivationDate(null);
         expectedOutput.setFiscalCode(null);

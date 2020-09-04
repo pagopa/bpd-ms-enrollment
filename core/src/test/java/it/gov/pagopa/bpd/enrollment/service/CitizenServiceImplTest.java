@@ -6,6 +6,7 @@ import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -67,17 +68,14 @@ public class CitizenServiceImplTest {
 
 
     @Test
-    public void update() {
+    public void enroll() {
         String fiscalCode = RandomStringUtils.randomAlphanumeric(16);
-        CitizenDto dto = new CitizenDto();
-        dto.setTimestampTC(OffsetDateTime.now());
 
-        final CitizenResource result = citizenService.update(fiscalCode, dto);
+        final CitizenResource result = citizenService.enroll(fiscalCode);
 
-        verify(restClientMock, only()).update(eq(fiscalCode), eq(dto));
-        verify(restClientMock, times(1)).update(eq(fiscalCode), eq(dto));
+        verify(restClientMock, only()).update(eq(fiscalCode), Mockito.any(CitizenDto.class));
+        verify(restClientMock, times(1)).update(eq(fiscalCode), Mockito.any(CitizenDto.class));
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(dto.getTimestampTC(), result.getTimestampTC());
     }
 
 }

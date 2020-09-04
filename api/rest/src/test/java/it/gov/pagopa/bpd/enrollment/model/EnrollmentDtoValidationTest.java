@@ -26,7 +26,6 @@ public class EnrollmentDtoValidationTest {
     @Test
     public void testValid() {
         EnrollmentPaymentInstrumentDto enrollmentDto = new EnrollmentPaymentInstrumentDto();
-        enrollmentDto.setActivationDate(OffsetDateTime.now());
         enrollmentDto.setFiscalCode("PRNGEA09R54F205G");
         Set<ConstraintViolation<EnrollmentPaymentInstrumentDto>> violations = validator.validate(enrollmentDto);
 
@@ -35,17 +34,10 @@ public class EnrollmentDtoValidationTest {
 
 
     @Test
-    public void testInvalidActivationDate_notNull() {
+    public void testInvalidFiscalCode_notNull() {
         EnrollmentPaymentInstrumentDto enrollmentDto = new EnrollmentPaymentInstrumentDto();
-        enrollmentDto.setActivationDate(null);
-        enrollmentDto.setFiscalCode("PRNGEA09R54F205G");
         Set<ConstraintViolation<EnrollmentPaymentInstrumentDto>> violations = validator.validate(enrollmentDto);
-
         Assert.assertFalse(violations.isEmpty());
-        violations.removeIf(violation ->
-                "activationDate".equals(violation.getPropertyPath().toString()) &&
-                        NotNull.class.equals(violation.getConstraintDescriptor().getAnnotation().annotationType()));
-        Assert.assertTrue(violations.isEmpty());
     }
 
 }

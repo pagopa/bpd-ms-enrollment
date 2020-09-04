@@ -12,6 +12,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
+
 /**
  * @see it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand
  */
@@ -37,8 +39,8 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
     @Override
     protected PaymentInstrumentResource doExecute() {
         final PaymentInstrumentResource paymentInstrumentResource;
-
         final CitizenResource citizen = citizenService.findById(paymentInstrumentDTO.getFiscalCode());
+        paymentInstrumentDTO.setActivationDate(OffsetDateTime.now());
         if (citizen.isEnabled()) {
             paymentInstrumentResource = paymentInstrumentService.update(hashPan, paymentInstrumentDTO);
         } else {

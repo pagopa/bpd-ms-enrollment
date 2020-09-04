@@ -17,11 +17,6 @@ import java.time.OffsetDateTime;
 @Data
 public class EnrollmentPaymentInstrumentDto {
 
-    @ApiModelProperty(value = "${swagger.enrollment.activationDate}", required = true)
-    @JsonProperty(required = true)
-    @NotNull
-    private OffsetDateTime activationDate;
-
     @NotNull
     @NotBlank
     @Size(min = 16, max = 16)

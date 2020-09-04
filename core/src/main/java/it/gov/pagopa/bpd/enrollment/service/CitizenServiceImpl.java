@@ -31,11 +31,6 @@ class CitizenServiceImpl extends BaseService implements CitizenService {
 
 
     @Override
-    public CitizenResource update(String fiscalCode, CitizenDto dto) {
-        return restClient.update(fiscalCode, dto);
-    }
-
-    @Override
     public CitizenResource enroll(String fiscalCode) {
         CitizenDto dto = new CitizenDto();
         dto.setTimestampTC(OffsetDateTime.now());

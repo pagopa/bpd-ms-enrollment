@@ -36,13 +36,13 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public CitizenResource enrollCitizenIO(String fiscalCode, CitizenDto request) {
+    public CitizenResource enrollCitizenIO(String fiscalCode) {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenIO");
-            logger.debug(String.format("fiscalCode = %s, request = %s", fiscalCode, request));
+            logger.debug(String.format("fiscalCode = %s", fiscalCode));
         }
 
-        return citizenService.update(fiscalCode, request);
+        return citizenService.enroll(fiscalCode);
     }
 
 

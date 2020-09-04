@@ -222,34 +222,28 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void enrollCitizenIO_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
-        when(citizenService.update(anyString(), any(CitizenDto.class)))
+        when(citizenService.enroll(anyString()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
-                    result.setTimestampTC(invocation.getArgument(1, CitizenDto.class).getTimestampTC());
-
                     return result;
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put("/bpd/io/enrollment/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).update(eq(fiscalCode), eq(request));
-        verify(citizenService, times(1)).update(eq(fiscalCode), eq(request));
+        verify(citizenService, only()).enroll(eq(fiscalCode));
+        verify(citizenService, times(1)).enroll(eq(fiscalCode));
 
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getTimestampTC(), result.getTimestampTC());
     }
 
 

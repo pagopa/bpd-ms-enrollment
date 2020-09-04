@@ -12,6 +12,8 @@ public interface CitizenService {
 
     CitizenResource update(String fiscalCode, CitizenDto dto);
 
+    CitizenResource enroll(String fiscalCode);
+
     void delete(String fiscalCode);
 
 }

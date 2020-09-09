@@ -225,7 +225,7 @@ public class BpdEnrollmentControllerImplTest {
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
-                .put("/bpd/io/enrollment/citizens/" + fiscalCode)
+                .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -243,15 +243,12 @@ public class BpdEnrollmentControllerImplTest {
 
     @Test
     public void enrollCitizenIO_BadRequest() throws Exception {
-        final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(null);
+        final String fiscalCode = "";
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
 

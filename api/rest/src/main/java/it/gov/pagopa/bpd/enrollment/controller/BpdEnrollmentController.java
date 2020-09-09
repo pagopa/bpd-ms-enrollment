@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @Validated
 public interface BpdEnrollmentController {
 
-    @PutMapping(value = "io/enrollment/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/io/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     CitizenResource enrollCitizenIO(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)

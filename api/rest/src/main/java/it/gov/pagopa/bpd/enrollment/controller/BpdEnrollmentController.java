@@ -8,6 +8,7 @@ import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +38,7 @@ public interface BpdEnrollmentController {
 
     @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentIO(
+    EnrollmentPaymentInstrumentResource enrollPaymentInstrumentIO(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
             @PathVariable("id")
             @NotBlank
@@ -57,7 +58,7 @@ public interface BpdEnrollmentController {
 
     @PutMapping(value = "enrollment/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentHB(
+    EnrollmentPaymentInstrumentResource enrollPaymentInstrumentHB(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
             @PathVariable("id")
             @NotBlank

@@ -6,6 +6,7 @@ import eu.sia.meda.error.config.LocalErrorConfig;
 import eu.sia.meda.error.handler.MedaExceptionHandler;
 import eu.sia.meda.error.service.impl.LocalErrorManagerServiceImpl;
 import it.gov.pagopa.bpd.common.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.assembler.PaymentInstrumentResourceAssembler;
 import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
@@ -15,10 +16,12 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
 import it.gov.pagopa.bpd.enrollment.factory.PaymentInstrumentFactory;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,6 +69,9 @@ public class BpdEnrollmentControllerImplTest {
     @MockBean
     private EnrollPaymentInstrumentCommand paymentInstrumentCommandMock;
 
+    @SpyBean
+    private PaymentInstrumentResourceAssembler paymentInstrumentResourceAssembler;
+
     @MockBean
     private DeleteEnrolledCitizenCommand deleteEnrolledCitizenCommandMock;
 
@@ -86,10 +92,7 @@ public class BpdEnrollmentControllerImplTest {
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
-                    result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
                     result.setActivationDate(CURRENT_OFFSET_DATE_TIME);
-                    result.setHpan(hashPan);
-                    result.setFiscalCode(fiscalCode);
 
                     return result;
                 });
@@ -101,19 +104,17 @@ public class BpdEnrollmentControllerImplTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
-        PaymentInstrumentResource result =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PaymentInstrumentResource.class);
+        EnrollmentPaymentInstrumentResource result =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), EnrollmentPaymentInstrumentResource.class);
 
         verify(paymentInstrumentFactoryMock, only()).apply(eq(request));
         verify(paymentInstrumentFactoryMock, times(1)).apply(eq(request));
         verify(paymentInstrumentCommandMock, only()).execute();
         verify(paymentInstrumentCommandMock, times(1)).execute();
+        BDDMockito.verify(paymentInstrumentResourceAssembler).toResource(Mockito.any(PaymentInstrumentResource.class));
 
         assertNotNull(result);
-        assertEquals(hashPan, result.getHpan());
-        assertEquals(fiscalCode, result.getFiscalCode());
         assertEquals(CURRENT_OFFSET_DATE_TIME, result.getActivationDate());
-        assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
     }
 
 
@@ -167,10 +168,7 @@ public class BpdEnrollmentControllerImplTest {
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
-                    result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
                     result.setActivationDate(CURRENT_OFFSET_DATE_TIME);
-                    result.setHpan(hashPan);
-                    result.setFiscalCode(fiscalCode);
 
                     return result;
                 });
@@ -182,19 +180,18 @@ public class BpdEnrollmentControllerImplTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
-        PaymentInstrumentResource result =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PaymentInstrumentResource.class);
+        EnrollmentPaymentInstrumentResource result =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), EnrollmentPaymentInstrumentResource.class);
 
         verify(paymentInstrumentFactoryMock, only()).apply(eq(request));
         verify(paymentInstrumentFactoryMock, times(1)).apply(eq(request));
         verify(paymentInstrumentCommandMock, only()).execute();
         verify(paymentInstrumentCommandMock, times(1)).execute();
+        BDDMockito.verify(paymentInstrumentResourceAssembler).toResource(Mockito.any(PaymentInstrumentResource.class));
+
 
         assertNotNull(result);
-        assertEquals(hashPan, result.getHpan());
-        assertEquals(request.getFiscalCode(), result.getFiscalCode());
         assertEquals(CURRENT_OFFSET_DATE_TIME, result.getActivationDate());
-        assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
     }
 
 

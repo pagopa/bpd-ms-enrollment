@@ -1,5 +1,6 @@
 package it.gov.pagopa.bpd.enrollment.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import it.gov.pagopa.bpd.common.util.Constants;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class EnrollmentPaymentInstrumentDto {
     @NotBlank
     @Size(min = 16, max = 16)
     @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
+    @ApiModelProperty(value = "${swagger.enrollment.fiscalCode}", required = true)
     private String fiscalCode;
 
 }

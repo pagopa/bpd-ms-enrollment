@@ -6,6 +6,7 @@ import eu.sia.meda.error.config.LocalErrorConfig;
 import eu.sia.meda.error.handler.MedaExceptionHandler;
 import eu.sia.meda.error.service.impl.LocalErrorManagerServiceImpl;
 import it.gov.pagopa.bpd.common.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.assembler.CitizenResourceAssembler;
 import it.gov.pagopa.bpd.enrollment.assembler.PaymentInstrumentResourceAssembler;
 import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
@@ -71,6 +72,9 @@ public class BpdEnrollmentControllerImplTest {
 
     @SpyBean
     private PaymentInstrumentResourceAssembler paymentInstrumentResourceAssembler;
+
+    @SpyBean
+    private CitizenResourceAssembler citizenResourceAssembler;
 
     @MockBean
     private DeleteEnrolledCitizenCommand deleteEnrolledCitizenCommandMock;
@@ -232,7 +236,7 @@ public class BpdEnrollmentControllerImplTest {
 
         verify(citizenService, only()).enroll(eq(fiscalCode));
         verify(citizenService, times(1)).enroll(eq(fiscalCode));
-
+        BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
     }
@@ -275,6 +279,7 @@ public class BpdEnrollmentControllerImplTest {
 
         verify(citizenService, only()).enroll(eq(fiscalCode));
         verify(citizenService, times(1)).enroll(eq(fiscalCode));
+        BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
 
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());

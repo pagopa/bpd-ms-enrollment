@@ -24,7 +24,10 @@ import static org.junit.Assert.assertNotNull;
 
 @TestPropertySource(
         locations = "classpath:config/payment_instrument/rest-client.properties",
-        properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
+        properties = {
+                "spring.application.name=bpd-ms-enrollment-integration-rest",
+                "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG"
+        })
 @ContextConfiguration(initializers = PaymentInstrumentRestClientImplTest.RandomPortInitializer.class,
         classes = PaymentInstrumentRestConnectorConfig.class)
 public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest {

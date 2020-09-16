@@ -25,7 +25,10 @@ import static org.junit.Assert.assertNotNull;
 
 @TestPropertySource(
         locations = "classpath:config/citizen/rest-client.properties",
-        properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
+        properties = {
+                "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG",
+                "spring.application.name=bpd-ms-enrollment-integration-rest"
+        })
 @ContextConfiguration(initializers = CitizenRestClientTest.RandomPortInitializer.class,
         classes = CitizenRestConnectorConfig.class)
 public class CitizenRestClientTest extends BaseFeignRestClientTest {

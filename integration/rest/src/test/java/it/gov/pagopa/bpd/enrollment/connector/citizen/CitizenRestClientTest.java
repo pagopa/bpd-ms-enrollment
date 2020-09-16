@@ -59,7 +59,7 @@ public class CitizenRestClientTest extends BaseFeignRestClientTest {
     public void update() {
         final String fiscalCode = "fiscalCode";
         CitizenDto request = new CitizenDto();
-        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
+        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749Z"));
 
         final CitizenResource actualResponse = restClient.update(fiscalCode, request);
 

@@ -30,11 +30,17 @@ import static org.junit.Assert.assertNotNull;
 public class CitizenRestClientTest extends BaseFeignRestClientTest {
 
     @ClassRule
-    public static WireMockClassRule wireMockRule = new WireMockClassRule(wireMockConfig()
-            .dynamicPort()
-            .usingFilesUnderClasspath("stubs/citizen")
-            .extensions(new ResponseTemplateTransformer(false))
-    );
+    public static WireMockClassRule wireMockRule;
+
+    static {
+        String port = System.getenv("WiremockPort");
+        wireMockRule = new WireMockClassRule(wireMockConfig()
+                .port(port != null ? Integer.parseInt(port) : 0)
+                .bindAddress("localhost")
+                .usingFilesUnderClasspath("stubs/citizen")
+                .extensions(new ResponseTemplateTransformer(false))
+        );
+    }
 
     @Test
     public void findById() {

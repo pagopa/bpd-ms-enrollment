@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
@@ -59,13 +60,12 @@ public class CitizenRestClientTest extends BaseFeignRestClientTest {
     public void update() {
         final String fiscalCode = "fiscalCode";
         CitizenDto request = new CitizenDto();
-        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749Z"));
+        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749+00:00"));
 
         final CitizenResource actualResponse = restClient.update(fiscalCode, request);
 
         assertNotNull(actualResponse);
         assertEquals(fiscalCode, actualResponse.getFiscalCode());
-        assertEquals(request.getTimestampTC(), actualResponse.getTimestampTC());
     }
 
     @Test

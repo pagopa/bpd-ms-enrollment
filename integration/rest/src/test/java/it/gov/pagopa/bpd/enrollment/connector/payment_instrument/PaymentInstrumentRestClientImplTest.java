@@ -25,6 +25,8 @@ import static org.junit.Assert.assertNotNull;
 @TestPropertySource(
         locations = "classpath:config/payment_instrument/rest-client.properties",
         properties = {
+                "feign.client.config.bpd-ms-payment-instrument.connectTimeout=10000",
+                "feign.client.config.bpd-ms-payment-instrument.readTimeout=10000",
                 "spring.application.name=bpd-ms-enrollment-integration-rest",
                 "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG"
         })

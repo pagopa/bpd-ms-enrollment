@@ -2,7 +2,14 @@
   "request": {
     "method": "PUT",
     "urlPathPattern": "/bpd/payment-instruments/(\\w*)",
-    "bodyPatterns": []
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "fiscalCode": "fiscalCode",
+          "activationDate": "2020-04-17T12:23:00.749+02:00"
+        }
+      }
+    ]
   },
   "response": {
     "status": "200",

@@ -11,14 +11,18 @@ spec:
     spec:
       containers:
         - name: bpdmsenrollement
-          image: cstarregistry.azurecr.io/bpdmsenrollement-sit
+          image: cstarregistry.azurecr.io/bpdmsenrollement
           ports:
             - containerPort: 8080
           envFrom:
+            - secretRef:
+                name: postgres-credentials
             - configMapRef:
                 name: eventhub-logging
             - configMapRef:
-                name: rest-client
+                name: bpdmsenrollement
+            - configMapRef:
+                name: jvm
       hostAliases:
         - hostnames:
             - bpd-hub-dev.servicebus.windows.net

@@ -6,6 +6,8 @@ import eu.sia.meda.error.config.LocalErrorConfig;
 import eu.sia.meda.error.handler.MedaExceptionHandler;
 import eu.sia.meda.error.service.impl.LocalErrorManagerServiceImpl;
 import it.gov.pagopa.bpd.common.factory.ModelFactory;
+import it.gov.pagopa.bpd.enrollment.assembler.CitizenResourceAssembler;
+import it.gov.pagopa.bpd.enrollment.assembler.PaymentInstrumentResourceAssembler;
 import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
@@ -15,10 +17,12 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
 import it.gov.pagopa.bpd.enrollment.factory.PaymentInstrumentFactory;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,6 +70,12 @@ public class BpdEnrollmentControllerImplTest {
     @MockBean
     private EnrollPaymentInstrumentCommand paymentInstrumentCommandMock;
 
+    @SpyBean
+    private PaymentInstrumentResourceAssembler paymentInstrumentResourceAssembler;
+
+    @SpyBean
+    private CitizenResourceAssembler citizenResourceAssembler;
+
     @MockBean
     private DeleteEnrolledCitizenCommand deleteEnrolledCitizenCommandMock;
 
@@ -81,16 +91,12 @@ public class BpdEnrollmentControllerImplTest {
         final String hashPan = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
-        request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
         request.setFiscalCode(fiscalCode);
 
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
-                    result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
-                    result.setActivationDate(request.getActivationDate());
-                    result.setHpan(hashPan);
-                    result.setFiscalCode(fiscalCode);
+                    result.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
                     return result;
                 });
@@ -102,19 +108,17 @@ public class BpdEnrollmentControllerImplTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
-        PaymentInstrumentResource result =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PaymentInstrumentResource.class);
+        EnrollmentPaymentInstrumentResource result =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), EnrollmentPaymentInstrumentResource.class);
 
         verify(paymentInstrumentFactoryMock, only()).apply(eq(request));
         verify(paymentInstrumentFactoryMock, times(1)).apply(eq(request));
         verify(paymentInstrumentCommandMock, only()).execute();
         verify(paymentInstrumentCommandMock, times(1)).execute();
+        BDDMockito.verify(paymentInstrumentResourceAssembler).toResource(Mockito.any(PaymentInstrumentResource.class));
 
         assertNotNull(result);
-        assertEquals(hashPan, result.getHpan());
-        assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getActivationDate(), result.getActivationDate());
-        assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
+        assertEquals(CURRENT_OFFSET_DATE_TIME, result.getActivationDate());
     }
 
 
@@ -123,7 +127,7 @@ public class BpdEnrollmentControllerImplTest {
         final String hashPanValue = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
-        request.setActivationDate(null);
+        request.setFiscalCode(null);
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPanValue)
@@ -140,7 +144,6 @@ public class BpdEnrollmentControllerImplTest {
         final String hashPan = "hashPan";
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
-        request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
         request.setFiscalCode(fiscalCode);
 
         BDDMockito.willThrow(new CitizenNotEnabledException("pippo"))
@@ -165,15 +168,11 @@ public class BpdEnrollmentControllerImplTest {
         final String fiscalCode = "DHFIVD85M84D048L";
         EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
         request.setFiscalCode(fiscalCode);
-        request.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
         when(paymentInstrumentCommandMock.execute())
                 .thenAnswer(invocation -> {
                     PaymentInstrumentResource result = new PaymentInstrumentResource();
-                    result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
-                    result.setActivationDate(request.getActivationDate());
-                    result.setHpan(hashPan);
-                    result.setFiscalCode(fiscalCode);
+                    result.setActivationDate(CURRENT_OFFSET_DATE_TIME);
 
                     return result;
                 });
@@ -185,29 +184,25 @@ public class BpdEnrollmentControllerImplTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
-        PaymentInstrumentResource result =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PaymentInstrumentResource.class);
+        EnrollmentPaymentInstrumentResource result =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), EnrollmentPaymentInstrumentResource.class);
 
         verify(paymentInstrumentFactoryMock, only()).apply(eq(request));
         verify(paymentInstrumentFactoryMock, times(1)).apply(eq(request));
         verify(paymentInstrumentCommandMock, only()).execute();
         verify(paymentInstrumentCommandMock, times(1)).execute();
+        BDDMockito.verify(paymentInstrumentResourceAssembler).toResource(Mockito.any(PaymentInstrumentResource.class));
+
 
         assertNotNull(result);
-        assertEquals(hashPan, result.getHpan());
-        assertEquals(request.getFiscalCode(), result.getFiscalCode());
-        assertEquals(request.getActivationDate(), result.getActivationDate());
-        assertEquals(PaymentInstrumentResource.Status.ACTIVE, result.getStatus());
+        assertEquals(CURRENT_OFFSET_DATE_TIME, result.getActivationDate());
     }
 
 
     @Test
     public void enrollPaymentInstrumentHB_BadRequest() throws Exception {
         final String hashPan = "hashPan";
-        final String fiscalCode = "DHFIVD85M84D048L";
-        PaymentInstrumentDto request = new PaymentInstrumentDto();
-        request.setFiscalCode(fiscalCode);
-        request.setActivationDate(null);
+        EnrollmentPaymentInstrumentDto request = new EnrollmentPaymentInstrumentDto();
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/payment-instruments/" + hashPan)
@@ -222,48 +217,39 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void enrollCitizenIO_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
-        when(citizenService.update(anyString(), any(CitizenDto.class)))
+        when(citizenService.enroll(anyString()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
-                    result.setTimestampTC(invocation.getArgument(1, CitizenDto.class).getTimestampTC());
-
                     return result;
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
-                .put("/bpd/io/enrollment/citizens/" + fiscalCode)
+                .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).update(eq(fiscalCode), eq(request));
-        verify(citizenService, times(1)).update(eq(fiscalCode), eq(request));
-
+        verify(citizenService, only()).enroll(eq(fiscalCode));
+        verify(citizenService, times(1)).enroll(eq(fiscalCode));
+        BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getTimestampTC(), result.getTimestampTC());
     }
 
 
     @Test
     public void enrollCitizenIO_BadRequest() throws Exception {
-        final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(null);
+        final String fiscalCode = "";
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
 
@@ -274,34 +260,29 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void enrollCitizenHB_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
-        CitizenDto request = new CitizenDto();
-        request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
-        when(citizenService.update(anyString(), any(CitizenDto.class)))
+        when(citizenService.enroll(anyString()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
-                    result.setTimestampTC(invocation.getArgument(1, CitizenDto.class).getTimestampTC());
-
                     return result;
                 });
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/citizens/" + fiscalCode)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(objectMapper.writeValueAsString(request)))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).update(eq(fiscalCode), eq(request));
-        verify(citizenService, times(1)).update(eq(fiscalCode), eq(request));
+        verify(citizenService, only()).enroll(eq(fiscalCode));
+        verify(citizenService, times(1)).enroll(eq(fiscalCode));
+        BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
 
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
-        assertEquals(request.getTimestampTC(), result.getTimestampTC());
     }
 
 

@@ -7,7 +7,9 @@ import it.gov.pagopa.bpd.common.util.Constants;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentCitizenResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -26,19 +28,18 @@ import javax.validation.constraints.Size;
 @Validated
 public interface BpdEnrollmentController {
 
-    @PutMapping(value = "io/enrollment/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/io/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    CitizenResource enrollCitizenIO(
+    EnrollmentCitizenResource enrollCitizenIO(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
             @PathVariable("id") @UpperCase
             @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode,
-            @RequestBody @Valid CitizenDto request);
+                    String fiscalCode);
 
 
     @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentIO(
+    EnrollmentPaymentInstrumentResource enrollPaymentInstrumentIO(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
             @PathVariable("id")
             @NotBlank
@@ -48,18 +49,17 @@ public interface BpdEnrollmentController {
 
     @PutMapping(value = "enrollment/hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    CitizenResource enrollCitizenHB(
+    EnrollmentCitizenResource enrollCitizenHB(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
             @PathVariable("id") @UpperCase
             @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode,
-            @RequestBody @Valid CitizenDto request
+                    String fiscalCode
     );
 
 
     @PutMapping(value = "enrollment/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    PaymentInstrumentResource enrollPaymentInstrumentHB(
+    EnrollmentPaymentInstrumentResource enrollPaymentInstrumentHB(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
             @PathVariable("id")
             @NotBlank

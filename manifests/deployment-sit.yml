@@ -1,9 +1,12 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bpdmsenrollement
 spec:
-  replicas: 1
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: bpdmsenrollement
   template:
     metadata:
       labels:
@@ -11,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bpdmsenrollement
-          image: cstarregistry.azurecr.io/bpdmsenrollement
+          image: cstaruatregistry.azurecr.io/bpdmsenrollement
           ports:
             - containerPort: 8080
           envFrom:
@@ -22,8 +25,8 @@ spec:
             - configMapRef:
                 name: bpdmsenrollement
             - configMapRef:
-                name: jvm
+                name: jvm                
       hostAliases:
         - hostnames:
-            - bpd-hub-dev.servicebus.windows.net
-          ip: 10.70.5.9
+            - bpd-event-uat.servicebus.windows.net
+          ip: 10.70.67.5

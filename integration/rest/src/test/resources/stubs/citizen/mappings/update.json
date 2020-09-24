@@ -5,7 +5,7 @@
     "bodyPatterns": [
       {
         "equalToJson": {
-          "timestampTC": "2020-04-17T12:23:00.749+02:00"
+          "timestampTC": "2020-04-17T12:23:00.749Z"
         }
       }
     ]

@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
@@ -24,7 +25,10 @@ import static org.junit.Assert.assertNotNull;
 
 @TestPropertySource(
         locations = "classpath:config/citizen/rest-client.properties",
-        properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
+        properties = {
+                "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG",
+                "spring.application.name=bpd-ms-enrollment-integration-rest"
+        })
 @ContextConfiguration(initializers = CitizenRestClientTest.RandomPortInitializer.class,
         classes = CitizenRestConnectorConfig.class)
 public class CitizenRestClientTest extends BaseFeignRestClientTest {
@@ -33,7 +37,7 @@ public class CitizenRestClientTest extends BaseFeignRestClientTest {
     public static WireMockClassRule wireMockRule;
 
     static {
-        String port = System.getenv("WiremockPort");
+        String port = System.getenv("WIREMOCKPORT");
         wireMockRule = new WireMockClassRule(wireMockConfig()
                 .port(port != null ? Integer.parseInt(port) : 0)
                 .bindAddress("localhost")
@@ -59,13 +63,12 @@ public class CitizenRestClientTest extends BaseFeignRestClientTest {
     public void update() {
         final String fiscalCode = "fiscalCode";
         CitizenDto request = new CitizenDto();
-        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
+        request.setTimestampTC(OffsetDateTime.parse("2020-04-17T12:23:00.749+00:00"));
 
         final CitizenResource actualResponse = restClient.update(fiscalCode, request);
 
         assertNotNull(actualResponse);
         assertEquals(fiscalCode, actualResponse.getFiscalCode());
-        assertEquals(request.getTimestampTC(), actualResponse.getTimestampTC());
     }
 
     @Test

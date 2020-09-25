@@ -22,6 +22,12 @@ resources:
 
 variables:
 
+  # Wiremock Port
+  WiremockPort: '8080'
+  REST_CLIENT_READ_TIMEOUT: '10000'
+  REST_CLIENT_CONNECT_TIMEOUT: '10000'
+  
+
   dockerfileRelativePath: 'Dockerfile'
 
   # Agent VM image name for Build

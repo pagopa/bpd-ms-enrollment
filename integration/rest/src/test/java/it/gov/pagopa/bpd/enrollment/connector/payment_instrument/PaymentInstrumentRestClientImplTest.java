@@ -24,7 +24,10 @@ import static org.junit.Assert.assertNotNull;
 
 @TestPropertySource(
         locations = "classpath:config/payment_instrument/rest-client.properties",
-        properties = "spring.application.name=bpd-ms-enrollment-integration-rest")
+        properties = {
+                "spring.application.name=bpd-ms-enrollment-integration-rest",
+                "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG"
+        })
 @ContextConfiguration(initializers = PaymentInstrumentRestClientImplTest.RandomPortInitializer.class,
         classes = PaymentInstrumentRestConnectorConfig.class)
 public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest {
@@ -33,7 +36,7 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
     public static WireMockClassRule wireMockRule;
 
     static {
-        String port = System.getenv("WiremockPort");
+        String port = System.getenv("WIREMOCKPORT");
         wireMockRule = new WireMockClassRule(wireMockConfig()
                 .port(port != null ? Integer.parseInt(port) : 0)
                 .bindAddress("localhost")

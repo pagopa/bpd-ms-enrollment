@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bpdmsenrollement
+  name: bpdmsenrollment
 spec:
   replicas: 1  
   selector:
     matchLabels:
-      app: bpdmsenrollement
+      app: bpdmsenrollment
   template:
     metadata:
       labels:
-        app: bpdmsenrollement
+        app: bpdmsenrollment
     spec:
       containers:
-        - name: bpdmsenrollement
-          image: cstaruatregistry.azurecr.io/bpdmsenrollement
+        - name: bpdmsenrollment
+          image: cstaruatregistry.azurecr.io/bpdmsenrollment
           ports:
             - containerPort: 8080
           envFrom:
@@ -23,7 +23,9 @@ spec:
             - configMapRef:
                 name: eventhub-logging
             - configMapRef:
-                name: bpdmsenrollement
+                name: rest-client
+            - configMapRef:
+                name: bpdmsenrollment
             - configMapRef:
                 name: jvm                
       hostAliases:

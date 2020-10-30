@@ -26,6 +26,8 @@ import static org.junit.Assert.assertNotNull;
         locations = "classpath:config/payment_instrument/rest-client.properties",
         properties = {
                 "spring.application.name=bpd-ms-enrollment-integration-rest",
+                "feign.client.config.bpd-ms-payment-instrument.connectTimeout=7000",
+                "feign.client.config.bpd-ms-payment-instrument.readTimeout=7000",
                 "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG"
         })
 @ContextConfiguration(initializers = PaymentInstrumentRestClientImplTest.RandomPortInitializer.class,

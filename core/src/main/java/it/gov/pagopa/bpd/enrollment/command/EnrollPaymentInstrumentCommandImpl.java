@@ -12,6 +12,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import feign.FeignException;
+
 import java.time.OffsetDateTime;
 
 /**
@@ -39,7 +41,16 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
     @Override
     protected PaymentInstrumentResource doExecute() {
         final PaymentInstrumentResource paymentInstrumentResource;
-        final CitizenResource citizen = citizenService.findById(paymentInstrumentDTO.getFiscalCode());
+
+        CitizenResource citizen = null;
+        try{
+            citizen = citizenService.findById(paymentInstrumentDTO.getFiscalCode());
+        }catch(FeignException ex){
+            if(ex.status()==404){
+                throw new CitizenNotEnabledException(paymentInstrumentDTO.getFiscalCode());
+            }
+        }
+
         paymentInstrumentDTO.setActivationDate(OffsetDateTime.now());
         if (citizen.isEnabled()) {
             paymentInstrumentResource = paymentInstrumentService.update(hashPan, paymentInstrumentDTO);

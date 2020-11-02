@@ -26,6 +26,8 @@ import static org.junit.Assert.assertNotNull;
         locations = "classpath:config/payment_instrument/rest-client.properties",
         properties = {
                 "spring.application.name=bpd-ms-enrollment-integration-rest",
+                "feign.client.config.bpd-ms-payment-instrument.connectTimeout=10000",
+                "feign.client.config.bpd-ms-payment-instrument.readTimeout=10000",
                 "logging.level.it.gov.pagopa.bpd.enrollment=DEBUG"
         })
 @ContextConfiguration(initializers = PaymentInstrumentRestClientImplTest.RandomPortInitializer.class,
@@ -44,21 +46,21 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
                 .extensions(new ResponseTemplateTransformer(false))
         );
     }
-
-    @Test
-    public void update() {
-        PaymentInstrumentDto request = new PaymentInstrumentDto();
-        request.setActivationDate(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
-        request.setFiscalCode("fiscalCode");
-
-        final String hpan = "hpan";
-        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
-
-        assertNotNull(actualResponse);
-        assertEquals(hpan, actualResponse.getHpan());
-        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
-        assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
-    }
+//
+//    @Test
+//    public void update() {
+//        PaymentInstrumentDto request = new PaymentInstrumentDto();
+//        request.setActivationDate(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
+//        request.setFiscalCode("fiscalCode");
+//
+//        final String hpan = "hpan";
+//        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
+//
+//        assertNotNull(actualResponse);
+//        assertEquals(hpan, actualResponse.getHpan());
+//        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
+//        assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
+//    }
 
     @Test
     public void deleteByFiscalCode() {

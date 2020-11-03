@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bpdmsenrollment
-          image: cstaruatregistry.azurecr.io/bpdmsenrollment
+          image: cstarregistry.azurecr.io/bpdmsenrollment
           ports:
             - containerPort: 8080
           envFrom:
@@ -30,5 +30,5 @@ spec:
                 name: jvm                
       hostAliases:
         - hostnames:
-            - bpd-event-uat.servicebus.windows.net
-          ip: 10.70.67.5
+            - bpd-hub-dev.servicebus.windows.net
+          ip: 10.70.5.9

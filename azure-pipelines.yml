@@ -158,7 +158,7 @@ stages:
                     imagePullSecrets: |
                       $(imagePullSecret)
                     containers: |
-                      $(containerRegistry)/$(imageRepository):$(pomversion)
+                      $(containerRegistry)/$(imageRepository):$(Build.BuildId)
                     
       - deployment: Deploy2
         displayName: Deploy UAT
@@ -185,7 +185,7 @@ stages:
                   manifests: |
                     $(Pipeline.Workspace)/manifests/$(deployment).yml
                     $(Pipeline.Workspace)/manifests/service.yml
-                  containers: '$(containerRegistry)/$(imageRepository):$(pomversion)'
+                  containers: '$(containerRegistry)/$(imageRepository):$(Build.BuildId)'
                   imagePullSecrets: '$(imagePullSecret)'
       - deployment: Deploy3
         displayName: Deploy PROD

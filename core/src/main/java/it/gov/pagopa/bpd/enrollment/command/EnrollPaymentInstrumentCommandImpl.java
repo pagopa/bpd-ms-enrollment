@@ -48,6 +48,8 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
         }catch(FeignException ex){
             if(ex.status()==404){
                 throw new CitizenNotEnabledException(paymentInstrumentDTO.getFiscalCode());
+            }else{
+                throw ex;
             }
         }
 

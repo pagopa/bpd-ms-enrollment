@@ -20,4 +20,6 @@ public class PaymentInstrumentDto {
     @NotNull
     private OffsetDateTime activationDate;
 
+    private String channel;
+
 }

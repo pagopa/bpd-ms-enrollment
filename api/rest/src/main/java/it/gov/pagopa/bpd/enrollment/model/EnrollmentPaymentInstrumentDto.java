@@ -22,4 +22,7 @@ public class EnrollmentPaymentInstrumentDto {
     @ApiModelProperty(value = "${swagger.enrollment.fiscalCode}", required = true)
     private String fiscalCode;
 
+    @ApiModelProperty(value = "${swagger.enrollment.channel}", required = true)
+    private String channel;
+
 }

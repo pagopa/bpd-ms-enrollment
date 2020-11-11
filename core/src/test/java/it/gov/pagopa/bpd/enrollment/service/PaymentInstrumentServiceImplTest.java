@@ -53,6 +53,7 @@ public class PaymentInstrumentServiceImplTest {
         PaymentInstrumentDto dto = new PaymentInstrumentDto();
         dto.setFiscalCode(RandomStringUtils.randomAlphanumeric(16));
         dto.setActivationDate(OffsetDateTime.now());
+        dto.setChannel("channel");
 
         PaymentInstrumentResource updated = paymentInstrumentService.update(hashPan, dto);
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Payment Instrument Rest Client
+ * Winning Transaction Rest Client
  */
 @FeignClient(name = "${rest-client.winning-transaction.serviceCode}", url = "${rest-client.winning-transaction.base-url}")
 public interface WinningTransactionRestClient {

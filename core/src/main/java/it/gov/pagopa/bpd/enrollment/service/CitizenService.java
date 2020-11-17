@@ -1,6 +1,5 @@
 package it.gov.pagopa.bpd.enrollment.service;
 
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 
 /**

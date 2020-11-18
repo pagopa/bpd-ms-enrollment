@@ -66,11 +66,14 @@ public interface BpdEnrollmentController {
                     String hashPan,
             @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
-    @DeleteMapping(value = "citizen/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "citizen/{id}/{channel}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteCitizen(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
             @PathVariable("id")
-            @NotBlank String fiscalCode) throws Exception;
+            @NotBlank String fiscalCode,
+            @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
+            @PathVariable("channel")
+            @NotBlank String channel) throws Exception;
 
 }

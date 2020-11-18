@@ -26,7 +26,8 @@ public interface PaymentInstrumentRestClient {
 
     @DeleteMapping(value = "${rest-client.payment-instrument.delete.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    void deleteByFiscalCode(@NotBlank @PathVariable("fiscalCode") String fiscalCode);
+    void deleteByFiscalCode(@NotBlank @PathVariable("fiscalCode") String fiscalCode,
+                            @NotBlank @PathVariable("channel") String channel);
 
     @PutMapping(value = "${rest-client.payment-instrument.rollback.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)

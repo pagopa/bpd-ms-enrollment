@@ -64,7 +64,7 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
 
     @Test
     public void deleteByFiscalCode() {
-        restClient.deleteByFiscalCode("test");
+        restClient.deleteByFiscalCode("test", "channel");
     }
 
     @Test

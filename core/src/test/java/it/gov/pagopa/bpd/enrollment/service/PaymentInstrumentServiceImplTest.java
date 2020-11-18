@@ -66,6 +66,16 @@ public class PaymentInstrumentServiceImplTest {
     }
 
     @Test
+    public void delete() {
+        String fiscalCode = "testFiscalCode";
+        String channel = "channel";
+        paymentInstrumentService.deleteByFiscalCode(fiscalCode, channel);
+
+        verify(restClientMock, only()).deleteByFiscalCode(eq(fiscalCode), eq(channel));
+        verify(restClientMock, times(1)).deleteByFiscalCode(eq(fiscalCode), eq(channel));
+    }
+
+    @Test
     public void rollback() {
         String fiscalCode = "testFiscalCode";
         OffsetDateTime requestTimestamp = OffsetDateTime.now();

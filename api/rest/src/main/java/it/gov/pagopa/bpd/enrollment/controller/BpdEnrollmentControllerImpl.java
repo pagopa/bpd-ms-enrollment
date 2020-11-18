@@ -95,14 +95,14 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
     }
 
     @Override
-    public void deleteCitizen(String fiscalCode) throws Exception {
+    public void deleteCitizen(String fiscalCode, String channel) throws Exception {
 
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.deleteCitizen");
             logger.debug(String.format("fiscalCode = %s", fiscalCode));
         }
 
-        if (!beanFactory.getBean(DeleteEnrolledCitizenCommand.class, fiscalCode).execute()) {
+        if (!beanFactory.getBean(DeleteEnrolledCitizenCommand.class, fiscalCode, channel).execute()) {
             throw new Exception("Uncapable to complete citizen deletion");
         }
 

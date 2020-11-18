@@ -30,8 +30,8 @@ class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrum
     }
 
     @Override
-    public void deleteByFiscalCode(String fiscalCode) {
-        restClient.deleteByFiscalCode(fiscalCode);
+    public void deleteByFiscalCode(String fiscalCode, String channel) {
+        restClient.deleteByFiscalCode(fiscalCode, channel);
     }
 
     @Override

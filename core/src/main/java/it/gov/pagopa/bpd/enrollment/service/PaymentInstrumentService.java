@@ -12,7 +12,7 @@ public interface PaymentInstrumentService {
 
     PaymentInstrumentResource update(String hpan, PaymentInstrumentDto paymentInstrument);
 
-    void deleteByFiscalCode(String fiscalCode);
+    void deleteByFiscalCode(String fiscalCode, String channel);
 
     void rollback(String fiscalCode, OffsetDateTime requestTimestamp);
 

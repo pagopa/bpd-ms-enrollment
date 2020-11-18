@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPathPattern": "/bpd/payment-instruments/rollback/(\\w*)"
+  },
+  "response": {
+    "status": "204",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

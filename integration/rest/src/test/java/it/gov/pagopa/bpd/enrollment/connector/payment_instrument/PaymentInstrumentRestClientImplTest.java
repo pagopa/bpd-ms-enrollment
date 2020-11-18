@@ -67,6 +67,11 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
         restClient.deleteByFiscalCode("test");
     }
 
+    @Test
+    public void rollback() {
+        restClient.rollback("test", OffsetDateTime.now());
+    }
+
 
     @Autowired
     private PaymentInstrumentRestClient restClient;

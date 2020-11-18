@@ -14,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 
+import java.time.OffsetDateTime;
+
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 @TestPropertySource(
@@ -45,6 +47,12 @@ public class WinningTransactionRestClientTest extends BaseFeignRestClientTest {
     public void deleteByFiscalCode() {
         restClient.deleteByFiscalCode("test");
     }
+
+    @Test
+    public void rollback() {
+        restClient.rollback("test", OffsetDateTime.now());
+    }
+
 
 
     @Autowired

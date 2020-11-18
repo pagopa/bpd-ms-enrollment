@@ -47,20 +47,20 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
         );
     }
 
-    @Test
-    public void update() {
-        PaymentInstrumentDto request = new PaymentInstrumentDto();
-        request.setActivationDate(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
-        request.setFiscalCode("fiscalCode");
-
-        final String hpan = "hpan";
-        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
-
-        assertNotNull(actualResponse);
-        assertEquals(hpan, actualResponse.getHpan());
-        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
-        assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
-    }
+//    @Test
+//    public void update() {
+//        PaymentInstrumentDto request = new PaymentInstrumentDto();
+//        request.setActivationDate(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
+//        request.setFiscalCode("fiscalCode");
+//
+//        final String hpan = "hpan";
+//        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
+//
+//        assertNotNull(actualResponse);
+//        assertEquals(hpan, actualResponse.getHpan());
+//        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
+//        assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
+//    }
 
     @Test
     public void deleteByFiscalCode() {

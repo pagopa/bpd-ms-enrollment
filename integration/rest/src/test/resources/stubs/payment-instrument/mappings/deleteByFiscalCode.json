@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "DELETE",
-    "urlPathPattern": "/bpd/payment-instruments/fiscal-code/(\\w*)"
+    "urlPathPattern": "/bpd/payment-instruments/fiscal-code/(\\w*)/(\\w*)"
   },
   "response": {
     "status": "204",

@@ -306,13 +306,14 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void deleteByFiscalCode_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
+        final String channel = "channel";
         CitizenDto request = new CitizenDto();
         request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
         BDDMockito.doReturn(true).when(deleteEnrolledCitizenCommandMock).execute();
 
         mvc.perform(MockMvcRequestBuilders
-                .delete("/bpd/citizen/" + fiscalCode)
+                .delete("/bpd/citizen/" + fiscalCode + "/" + channel)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -325,13 +326,14 @@ public class BpdEnrollmentControllerImplTest {
     @Test
     public void deleteByFiscalCode_KO() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
+        final String channel = "channel";
         CitizenDto request = new CitizenDto();
         request.setTimestampTC(CURRENT_OFFSET_DATE_TIME);
 
         BDDMockito.doReturn(false).when(deleteEnrolledCitizenCommandMock).execute();
 
         mvc.perform(MockMvcRequestBuilders
-                .delete("/bpd/citizen/" + fiscalCode)
+                .delete("/bpd/citizen/" + fiscalCode + "/" + channel)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError())

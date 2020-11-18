@@ -65,4 +65,14 @@ public class PaymentInstrumentServiceImplTest {
         assertEquals(dto.getFiscalCode(), updated.getFiscalCode());
     }
 
+    @Test
+    public void rollback() {
+        String fiscalCode = "testFiscalCode";
+        OffsetDateTime requestTimestamp = OffsetDateTime.now();
+        paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
+
+        verify(restClientMock, only()).rollback(eq(fiscalCode), eq(requestTimestamp));
+        verify(restClientMock, times(1)).rollback(eq(fiscalCode), eq(requestTimestamp));
+    }
+
 }

@@ -10,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.OffsetDateTime;
+
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -31,5 +33,15 @@ public class WinningTransactionServiceImplTest {
 
         verify(restClientMock, only()).deleteByFiscalCode(eq(fiscalCode));
         verify(restClientMock, times(1)).deleteByFiscalCode(eq(fiscalCode));
+    }
+
+    @Test
+    public void rollback() {
+        String fiscalCode = "testFiscalCode";
+        OffsetDateTime requestTimestamp = OffsetDateTime.now();
+        winningTransactionService.rollback(fiscalCode, requestTimestamp);
+
+        verify(restClientMock, only()).rollback(eq(fiscalCode), eq(requestTimestamp));
+        verify(restClientMock, times(1)).rollback(eq(fiscalCode), eq(requestTimestamp));
     }
 }

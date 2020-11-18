@@ -7,6 +7,8 @@ import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentIn
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+
 /**
  * @see it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService
  */
@@ -30,6 +32,11 @@ class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrum
     @Override
     public void deleteByFiscalCode(String fiscalCode) {
         restClient.deleteByFiscalCode(fiscalCode);
+    }
+
+    @Override
+    public void rollback(String fiscalCode, OffsetDateTime requestTimestamp) {
+        restClient.rollback(fiscalCode, requestTimestamp);
     }
 
 }

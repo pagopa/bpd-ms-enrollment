@@ -19,6 +19,10 @@ import java.time.OffsetDateTime;
 @FeignClient(name = "${rest-client.payment-instrument.serviceCode}", url = "${rest-client.payment-instrument.base-url}")
 public interface PaymentInstrumentRestClient {
 
+    @GetMapping(value = "${rest-client.payment-instrument.find.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    PaymentInstrumentResource find(@NotBlank @PathVariable("hashPan") String hpan);
+
     @PutMapping(value = "${rest-client.payment-instrument.update.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     PaymentInstrumentResource update(@RequestBody @Valid PaymentInstrumentDto paymentInstrument,

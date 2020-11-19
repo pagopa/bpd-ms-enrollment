@@ -5,6 +5,7 @@ import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
+import it.gov.pagopa.bpd.enrollment.exception.PaymentInstrumentOnDifferentUserException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,15 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
                 throw new CitizenNotEnabledException(paymentInstrumentDTO.getFiscalCode());
             }else{
                 throw ex;
+            }
+        }
+
+        PaymentInstrumentResource pi = paymentInstrumentService.find(hashPan);
+        if(pi!=null && pi.getFiscalCode()!=null && !pi.getFiscalCode().equals(paymentInstrumentDTO.getFiscalCode())){
+            CitizenResource citizenOld = citizenService.findById(pi.getFiscalCode());
+
+            if(citizenOld.isEnabled()){
+                throw new PaymentInstrumentOnDifferentUserException(hashPan);
             }
         }
 

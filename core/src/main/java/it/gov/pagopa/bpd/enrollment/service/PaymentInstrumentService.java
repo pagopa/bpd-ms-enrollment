@@ -10,6 +10,8 @@ import java.time.OffsetDateTime;
  */
 public interface PaymentInstrumentService {
 
+    PaymentInstrumentResource find (String hpan);
+
     PaymentInstrumentResource update(String hpan, PaymentInstrumentDto paymentInstrument);
 
     void deleteByFiscalCode(String fiscalCode, String channel);

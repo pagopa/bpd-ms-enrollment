@@ -69,7 +69,6 @@ public class EnrollPaymentInstrumentCommandImplTest {
         Assert.assertFalse(result);
 
         BDDMockito.verify(citizenService, Mockito.times(1)).delete(Mockito.eq(FISCAL_CODE));
-//        BDDMockito.verifyZeroInteractions(paymentInstrumentService);
 
     }
 
@@ -86,7 +85,6 @@ public class EnrollPaymentInstrumentCommandImplTest {
         Boolean result = deleteEnrolledCitizenCommand.doExecute();
         Assert.assertFalse(result);
 
-//        BDDMockito.verify(citizenService, Mockito.times(1)).delete(Mockito.eq(FISCAL_CODE));
         BDDMockito.verify(paymentInstrumentService, Mockito.times(1))
                 .deleteByFiscalCode(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
 

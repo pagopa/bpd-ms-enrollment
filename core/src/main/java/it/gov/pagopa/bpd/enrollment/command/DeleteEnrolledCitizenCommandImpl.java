@@ -1,6 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.command;
 
 import eu.sia.meda.core.command.BaseCommand;
+import feign.FeignException;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
@@ -36,12 +37,21 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
         try {
             paymentInstrumentService.deleteByFiscalCode(fiscalCode, channel);
             winningTransactionService.deleteByFiscalCode(fiscalCode);
+        } catch (FeignException e) {
+            if (logger.isErrorEnabled()) {
+                logger.error(e.getMessage(), e);
+            }
+            paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
+            winningTransactionService.rollback(fiscalCode, requestTimestamp);
+            if (e.status() == 400) {
+                throw e;
+            }
         } catch (Exception e) {
             if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage(), e);
             }
-            paymentInstrumentService.rollback(fiscalCode,requestTimestamp);
-            winningTransactionService.rollback(fiscalCode,requestTimestamp);
+            paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
+            winningTransactionService.rollback(fiscalCode, requestTimestamp);
             return false;
         }
         try {
@@ -50,8 +60,8 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
             if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage(), e);
             }
-            paymentInstrumentService.rollback(fiscalCode,requestTimestamp);
-            winningTransactionService.rollback(fiscalCode,requestTimestamp);
+            paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
+            winningTransactionService.rollback(fiscalCode, requestTimestamp);
             return false;
         }
         return true;

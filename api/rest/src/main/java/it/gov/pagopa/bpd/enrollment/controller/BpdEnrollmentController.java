@@ -72,7 +72,7 @@ public interface BpdEnrollmentController {
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
             @PathVariable("id")
             @NotBlank String fiscalCode,
-            @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
+            @ApiParam(value = "${swagger.enrollment.channel}", required = true)
             @PathVariable("channel")
             @NotBlank String channel) throws Exception;
 

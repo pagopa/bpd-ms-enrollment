@@ -6,7 +6,6 @@ import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
-import it.gov.pagopa.bpd.enrollment.exception.PaymentInstrumentOnDifferentUserException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
 import org.junit.Assert;
@@ -103,24 +102,6 @@ public class EnrollCitizenCommandImplTest {
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, enrolled.getStatus());
         assertEquals(dto.getFiscalCode(), enrolled.getFiscalCode());
     }
-
-    @Test(expected = PaymentInstrumentOnDifferentUserException.class)
-    public void doExecuteKO() {
-        final PaymentInstrumentDto dto = new PaymentInstrumentDto();
-        dto.setFiscalCode(FISCAL_CODE_ERROR);
-
-        EnrollPaymentInstrumentCommandImpl enrollPaymentInstrumentCommand =
-                beanFactory.getBean(EnrollPaymentInstrumentCommandImpl.class, HASH_PAN, dto);
-        final PaymentInstrumentResource enrolled = enrollPaymentInstrumentCommand.doExecute();
-
-        verify(citizenService, only()).findById(eq(dto.getFiscalCode()));
-        verify(citizenService, times(1)).findById(eq(dto.getFiscalCode()));
-        verify(paymentInstrumentService, only()).find(eq(HASH_PAN));
-        verify(paymentInstrumentService, times(1)).find(eq(HASH_PAN));
-        assertEquals(HASH_PAN, enrolled.getHpan());
-        Assert.assertNotEquals(dto.getFiscalCode(), enrolled.getFiscalCode());
-    }
-
 
     @Test(expected = CitizenNotEnabledException.class)
     public void doExecuteCitizenDisabled() {

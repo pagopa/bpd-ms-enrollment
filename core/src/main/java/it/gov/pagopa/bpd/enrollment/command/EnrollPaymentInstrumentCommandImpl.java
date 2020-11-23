@@ -54,15 +54,6 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
             }
         }
 
-        PaymentInstrumentResource pi = paymentInstrumentService.find(hashPan);
-        if(pi!=null && pi.getFiscalCode()!=null && !pi.getFiscalCode().equals(paymentInstrumentDTO.getFiscalCode())){
-            CitizenResource citizenOld = citizenService.findById(pi.getFiscalCode());
-
-            if(citizenOld.isEnabled()){
-                throw new PaymentInstrumentOnDifferentUserException(hashPan);
-            }
-        }
-
         paymentInstrumentDTO.setActivationDate(OffsetDateTime.now());
         if (citizen.isEnabled()) {
             paymentInstrumentResource = paymentInstrumentService.update(hashPan, paymentInstrumentDTO);

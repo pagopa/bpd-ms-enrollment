@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: bpdmsenrollment
 spec:
-  replicas: 1  
+  replicas: 18
   selector:
     matchLabels:
       app: bpdmsenrollment

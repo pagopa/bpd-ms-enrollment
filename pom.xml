@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>it.gov.pagopa.bpd.ms</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
         <artifactId>bpd-ms-starter-parent</artifactId>
     </parent>
 
     <artifactId>bpd-ms-enrollment</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-rc1</version>
     <packaging>pom</packaging>
 
     <properties>
-        <bpd-commons.version>1.0.3</bpd-commons.version>
+        <bpd-commons.version>1.0.4</bpd-commons.version>
     </properties>
 
     <dependencyManagement>
@@ -22,17 +21,17 @@
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment.integration</groupId>
                 <artifactId>bpd-ms-enrollment-integration-rest</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0.0-rc1</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment</groupId>
                 <artifactId>bpd-ms-enrollment-core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0.0-rc1</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment.api</groupId>
                 <artifactId>bpd-ms-enrollment-api-rest</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0.0-rc1</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.commons</groupId>
@@ -88,4 +87,30 @@
         <module>integration</module>
         <module>api</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>cstar</id>
+            <url>https://pkgs.dev.azure.com/sia-dds/cstar/_packaging/cstar/maven/v1</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>cstar</id>
+            <url>https://pkgs.dev.azure.com/sia-dds/cstar/_packaging/cstar/maven/v1</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <scm>
+        <developerConnection>scm:git:https://github.com/pagopa/bpd-ms-enrollment.git</developerConnection>
+      <tag>1.0.0-rc1</tag>
+  </scm>
+
 </project>

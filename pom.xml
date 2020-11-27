@@ -109,4 +109,8 @@
         </repository>
     </repositories>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/pagopa/bpd-ms-enrollment.git</developerConnection>
+    </scm>
+
 </project>

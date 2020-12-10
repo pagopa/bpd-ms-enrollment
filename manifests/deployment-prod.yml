@@ -32,6 +32,13 @@ spec:
                 name: bpdmsenrollment
             - configMapRef:
                 name: jvm
+          resources:
+            limits:
+              cpu: '1'
+              memory: 4Gi
+            requests:
+              cpu: 50m
+              memory: 256Mi
           livenessProbe:
             httpGet:
               path: /actuator/health

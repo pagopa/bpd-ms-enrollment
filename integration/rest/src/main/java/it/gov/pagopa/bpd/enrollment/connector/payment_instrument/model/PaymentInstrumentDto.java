@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 /**
  * Data Transfer Object (input) for {@link it.gov.pagopa.bpd.enrollment.connector.payment_instrument.PaymentInstrumentRestClient}
@@ -21,5 +22,7 @@ public class PaymentInstrumentDto {
     private OffsetDateTime activationDate;
 
     private String channel;
+
+    private List<String> tokenPanList;
 
 }

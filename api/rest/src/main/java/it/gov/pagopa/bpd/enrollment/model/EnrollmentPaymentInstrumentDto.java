@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Data Transfer Object (input) for {@link it.gov.pagopa.bpd.enrollment.controller.BpdEnrollmentController}
@@ -24,5 +25,8 @@ public class EnrollmentPaymentInstrumentDto {
 
     @ApiModelProperty(value = "${swagger.enrollment.channel}", required = true)
     private String channel;
+
+    @ApiModelProperty(value = "${swagger.enrollment.tokenPanList}", required = false)
+    private List<String> tokenPanList;
 
 }

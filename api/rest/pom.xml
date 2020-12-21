@@ -4,12 +4,12 @@
     <parent>
         <artifactId>bpd-ms-enrollment-api</artifactId>
         <groupId>it.gov.pagopa.bpd.ms.enrollment</groupId>
-        <version>1.0.2-rc3</version>
+        <version>1.0.2</version>
     </parent>
 
     <groupId>it.gov.pagopa.bpd.ms.enrollment.api</groupId>
     <artifactId>bpd-ms-enrollment-api-rest</artifactId>
-    <version>1.0.2-rc3</version>
+    <version>1.0.2</version>
 
     <dependencies>
         <dependency>

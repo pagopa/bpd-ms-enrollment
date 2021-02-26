@@ -4,6 +4,7 @@ import eu.sia.meda.core.command.BaseCommand;
 import feign.FeignException;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.PaymentInstrumenException;
+import it.gov.pagopa.bpd.enrollment.exception.PaymentInstrumenWarnException;
 import it.gov.pagopa.bpd.enrollment.exception.PaymentInstrumentDifferentChannelException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
@@ -43,6 +44,15 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
                 try {
                     paymentInstrumentService.deleteByFiscalCode(fiscalCode, channel);
                     return true;
+                } catch (FeignException e) {
+                    if (e.contentUTF8().startsWith("{\"returnMessages\":") && e.status() >= 400 && e.status() < 500) {
+                        PaymentInstrumenWarnException paymentInstrumenWarnException = new PaymentInstrumenWarnException(e.getMessage());
+                        paymentInstrumenWarnException.initCause(e);
+                        throw paymentInstrumenWarnException;
+                    }
+                    PaymentInstrumenException paymentInstrumenException = new PaymentInstrumenException(e.getMessage());
+                    paymentInstrumenException.initCause(e);
+                    throw paymentInstrumenException;
                 } catch (Exception e) {
                     PaymentInstrumenException paymentInstrumenException = new PaymentInstrumenException(e.getMessage());
                     paymentInstrumenException.initCause(e);
@@ -56,7 +66,9 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
             paymentFuture.get();
             winningFuture.get();
         } catch (Exception e) {
-            if (logger.isErrorEnabled()) {
+            if (logger.isWarnEnabled() && e.getCause() instanceof PaymentInstrumenWarnException) {
+                logger.warn(e.getMessage(), e);
+            } else if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage(), e);
             }
             CompletableFuture<Boolean> rollbackPiFuture = CompletableFuture.supplyAsync(() -> {
@@ -69,7 +81,7 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
             });
             rollbackPiFuture.get();
             rollbackTransactionFuture.get();
-            if (e.getCause() instanceof PaymentInstrumenException
+            if (e.getCause() instanceof PaymentInstrumenWarnException
                     && ((FeignException) e.getCause().getCause()).status() == 400) {
                 throw new PaymentInstrumentDifferentChannelException(e.getMessage());
             }

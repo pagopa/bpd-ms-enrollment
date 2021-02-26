@@ -1,19 +1,17 @@
 package it.gov.pagopa.bpd.enrollment.command;
 
 import eu.sia.meda.core.command.BaseCommand;
+import feign.FeignException;
 import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.exception.CitizenNotEnabledException;
-import it.gov.pagopa.bpd.enrollment.exception.PaymentInstrumentOnDifferentUserException;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import feign.FeignException;
 
 import java.time.OffsetDateTime;
 
@@ -47,9 +45,9 @@ class EnrollPaymentInstrumentCommandImpl extends BaseCommand<PaymentInstrumentRe
         try{
             citizen = citizenService.findById(paymentInstrumentDTO.getFiscalCode());
         }catch(FeignException ex){
-            if(ex.status()==404){
+            if (ex.status() == 404 && ex.contentUTF8().startsWith("{\"returnMessages\":")) {
                 throw new CitizenNotEnabledException(paymentInstrumentDTO.getFiscalCode());
-            }else{
+            } else {
                 throw ex;
             }
         }

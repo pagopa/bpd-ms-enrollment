@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>bpd-ms-enrollment</artifactId>
-    <version>1.2.1-rc1</version>
+    <version>1.2.1-rc2</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -21,17 +21,17 @@
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment.integration</groupId>
                 <artifactId>bpd-ms-enrollment-integration-rest</artifactId>
-                <version>1.2.1-rc1</version>
+                <version>1.2.1-rc2</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment</groupId>
                 <artifactId>bpd-ms-enrollment-core</artifactId>
-                <version>1.2.1-rc1</version>
+                <version>1.2.1-rc2</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment.api</groupId>
                 <artifactId>bpd-ms-enrollment-api-rest</artifactId>
-                <version>1.2.1-rc1</version>
+                <version>1.2.1-rc2</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.commons</groupId>
@@ -110,7 +110,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/pagopa/bpd-ms-enrollment.git</developerConnection>
-        <tag>1.2.1-rc1</tag>
+        <tag>1.2.1-rc2</tag>
   </scm>
 
 </project>

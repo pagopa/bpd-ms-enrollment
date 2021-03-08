@@ -40,10 +40,8 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
         final PaymentInstrumentResource paymentInstrumentResource;
 
         try {
-            CompletableFuture<Boolean> paymentFuture = CompletableFuture.supplyAsync(() -> {
                 try {
                     paymentInstrumentService.deleteByFiscalCode(fiscalCode, channel);
-                    return true;
                 } catch (FeignException e) {
                     if (e.contentUTF8().startsWith("{\"returnMessages\":") && e.status() >= 400 && e.status() < 500) {
                         PaymentInstrumenWarnException paymentInstrumenWarnException = new PaymentInstrumenWarnException(e.getMessage());
@@ -58,29 +56,18 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
                     paymentInstrumenException.initCause(e);
                     throw paymentInstrumenException;
                 }
-            });
-            CompletableFuture<Boolean> winningFuture = CompletableFuture.supplyAsync(() -> {
+
                 winningTransactionService.deleteByFiscalCode(fiscalCode);
-                return true;
-            });
-            paymentFuture.get();
-            winningFuture.get();
+
         } catch (Exception e) {
             if (logger.isWarnEnabled() && e.getCause() instanceof PaymentInstrumenWarnException) {
                 logger.warn(e.getMessage(), e);
             } else if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage(), e);
             }
-            CompletableFuture<Boolean> rollbackPiFuture = CompletableFuture.supplyAsync(() -> {
-                paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
-                return true;
-            });
-            CompletableFuture<Boolean> rollbackTransactionFuture = CompletableFuture.supplyAsync(() -> {
-                winningTransactionService.rollback(fiscalCode, requestTimestamp);
-                return true;
-            });
-            rollbackPiFuture.get();
-            rollbackTransactionFuture.get();
+
+            paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
+
             if (e.getCause() instanceof PaymentInstrumenWarnException
                     && ((FeignException) e.getCause().getCause()).status() == 400) {
                 throw new PaymentInstrumentDifferentChannelException(e.getMessage());

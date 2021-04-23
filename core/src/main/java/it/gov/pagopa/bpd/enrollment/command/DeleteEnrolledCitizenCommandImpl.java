@@ -60,7 +60,7 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
                 winningTransactionService.deleteByFiscalCode(fiscalCode);
 
         } catch (Exception e) {
-            if (logger.isWarnEnabled() && e.getCause() instanceof PaymentInstrumenWarnException) {
+            if (logger.isWarnEnabled() && e instanceof PaymentInstrumenWarnException) {
                 logger.warn(e.getMessage(), e);
             } else if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage(), e);
@@ -68,8 +68,8 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
 
             paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
 
-            if (e.getCause() instanceof PaymentInstrumenWarnException
-                    && ((FeignException) e.getCause().getCause()).status() == 400) {
+            if (e instanceof PaymentInstrumenWarnException
+                    && ((FeignException) e.getCause()).status() == 400) {
                 throw new PaymentInstrumentDifferentChannelException(e.getMessage());
             }
             throw new RuntimeException("Uncapable to complete citizen deletion");

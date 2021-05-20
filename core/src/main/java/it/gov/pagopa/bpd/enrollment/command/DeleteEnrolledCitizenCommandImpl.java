@@ -88,8 +88,22 @@ public class DeleteEnrolledCitizenCommandImpl extends BaseCommand<Boolean> imple
                 winningTransactionService.rollback(fiscalCode, requestTimestamp);
                 return true;
             });
-            rollbackPiFuture.get();
-            rollbackTransactionFuture.get();
+
+            try{
+                rollbackPiFuture.get();
+            }catch(Exception ex){
+                if(logger.isErrorEnabled()){
+                    logger.error("Uncapable to complete rollback for payment instruments", ex);
+                }
+            }
+
+            try{
+                rollbackTransactionFuture.get();
+            }catch (Exception ex){
+                if(logger.isErrorEnabled()){
+                    logger.error("Uncapable to complete rollback for winning transactions", ex);
+                }
+            }
             throw new RuntimeException("Uncapable to complete citizen deletion", e);
         }
         return true;

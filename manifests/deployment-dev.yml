@@ -15,6 +15,7 @@ spec:
       containers:
         - name: bpdmsenrollment
           image: cstardacr.azurecr.io/bpdmsenrollment
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:

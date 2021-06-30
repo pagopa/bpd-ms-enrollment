@@ -18,12 +18,15 @@ spec:
     spec:
       containers:
         - name: bpdmsenrollment
-          image: cstaruatregistry.azurecr.io/bpdmsenrollment
+          image: cstaruacr.azurecr.io/bpdmsenrollment
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
             - secretRef:
                 name: postgres-credentials
+            - secretRef:
+                name: application-insights
             - configMapRef:
                 name: eventhub-logging
             - configMapRef:
@@ -67,7 +70,4 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 30
-      hostAliases:
-        - hostnames:
-            - bpd-event-uat.servicebus.windows.net
-          ip: 10.70.67.5
+

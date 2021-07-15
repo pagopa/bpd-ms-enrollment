@@ -19,21 +19,21 @@ import java.time.OffsetDateTime;
 @FeignClient(name = "${rest-client.payment-instrument.serviceCode}", url = "${rest-client.payment-instrument.base-url}")
 public interface PaymentInstrumentRestClient {
 
-    @GetMapping(value = "${rest-client.payment-instrument.find.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "${rest-client.payment-instrument.find.url}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     PaymentInstrumentResource find(@NotBlank @PathVariable("hashPan") String hpan);
 
-    @PutMapping(value = "${rest-client.payment-instrument.update.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "${rest-client.payment-instrument.update.url}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     PaymentInstrumentResource update(@RequestBody @Valid PaymentInstrumentDto paymentInstrument,
                                      @NotBlank @PathVariable("hashPan") String hpan);
 
-    @DeleteMapping(value = "${rest-client.payment-instrument.delete.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "${rest-client.payment-instrument.delete.url}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     void deleteByFiscalCode(@NotBlank @PathVariable("fiscalCode") String fiscalCode,
                             @NotBlank @PathVariable("channel") String channel);
 
-    @PutMapping(value = "${rest-client.payment-instrument.rollback.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "${rest-client.payment-instrument.rollback.url}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void rollback(
             @ApiParam(required = true)

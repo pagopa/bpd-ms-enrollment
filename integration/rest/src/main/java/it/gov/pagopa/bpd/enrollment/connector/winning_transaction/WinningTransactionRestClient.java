@@ -16,11 +16,11 @@ import java.time.OffsetDateTime;
 @FeignClient(name = "${rest-client.winning-transaction.serviceCode}", url = "${rest-client.winning-transaction.base-url}")
 public interface WinningTransactionRestClient {
 
-    @DeleteMapping(value = "${rest-client.winning-transaction.delete.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "${rest-client.winning-transaction.delete.url}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     void deleteByFiscalCode(@NotBlank @PathVariable("fiscalCode") String fiscalCode);
 
-    @PutMapping(value = "${rest-client.winning-transaction.rollback.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "${rest-client.winning-transaction.rollback.url}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void rollback(
             @ApiParam(required = true)

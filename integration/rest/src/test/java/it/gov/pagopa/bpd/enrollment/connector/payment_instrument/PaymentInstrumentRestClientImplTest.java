@@ -19,8 +19,7 @@ import org.springframework.test.context.support.TestPropertySourceUtils;
 import java.time.OffsetDateTime;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @TestPropertySource(
         locations = "classpath:config/payment_instrument/rest-client.properties",
@@ -47,20 +46,20 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
         );
     }
 
-//    @Test
-//    public void update() {
-//        PaymentInstrumentDto request = new PaymentInstrumentDto();
-//        request.setActivationDate(OffsetDateTime.parse("2020-04-17T12:23:00.749+02:00"));
-//        request.setFiscalCode("fiscalCode");
-//
-//        final String hpan = "hpan";
-//        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
-//
-//        assertNotNull(actualResponse);
-//        assertEquals(hpan, actualResponse.getHpan());
-//        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
-//        assertEquals(request.getActivationDate(), actualResponse.getActivationDate());
-//    }
+    @Test
+    public void update() {
+        PaymentInstrumentDto request = new PaymentInstrumentDto();
+        request.setActivationDate(OffsetDateTime.now());
+        request.setFiscalCode("fiscalCode");
+
+        final String hpan = "hpan";
+        final PaymentInstrumentResource actualResponse = restClient.update(request, hpan);
+
+        assertNotNull(actualResponse);
+        assertEquals(hpan, actualResponse.getHpan());
+        assertEquals(request.getFiscalCode(), actualResponse.getFiscalCode());
+        assertTrue(request.getActivationDate().isEqual(actualResponse.getActivationDate()));
+    }
 
     @Test
     public void deleteByFiscalCode() {

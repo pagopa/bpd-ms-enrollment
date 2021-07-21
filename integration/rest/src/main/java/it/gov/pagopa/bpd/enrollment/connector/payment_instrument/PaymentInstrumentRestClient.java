@@ -1,6 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.connector.payment_instrument;
 
 import io.swagger.annotations.ApiParam;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.ChannelValidationResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -28,21 +29,11 @@ public interface PaymentInstrumentRestClient {
     PaymentInstrumentResource update(@RequestBody @Valid PaymentInstrumentDto paymentInstrument,
                                      @NotBlank @PathVariable("hashPan") String hpan);
 
-    @DeleteMapping(value = "${rest-client.payment-instrument.delete.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "${rest-client.payment-instrument.validate.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    void deleteByFiscalCode(@NotBlank @PathVariable("fiscalCode") String fiscalCode,
-                            @NotBlank @PathVariable("channel") String channel);
+    ChannelValidationResource validateByFiscalCode(@NotBlank @PathVariable("fiscalCode") String fiscalCode,
+                                                 @NotBlank @PathVariable("channel") String channel);
 
-    @PutMapping(value = "${rest-client.payment-instrument.rollback.url}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void rollback(
-            @ApiParam(required = true)
-            @PathVariable("fiscalCode")
-            @NotBlank
-                    String fiscalCode,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                    OffsetDateTime requestTimestamp
-    );
 
 }
 

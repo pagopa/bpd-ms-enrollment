@@ -41,11 +41,9 @@ public class PaymentInstrumentServiceImplTest {
                     result.setActivationDate(dtoArgument.getActivationDate());
                     result.setStatus(PaymentInstrumentResource.Status.ACTIVE);
                     result.setFiscalCode(dtoArgument.getFiscalCode());
-
                     return result;
                 });
     }
-
 
     @Test
     public void update() {
@@ -63,26 +61,6 @@ public class PaymentInstrumentServiceImplTest {
         assertEquals(dto.getActivationDate(), updated.getActivationDate());
         assertEquals(PaymentInstrumentResource.Status.ACTIVE, updated.getStatus());
         assertEquals(dto.getFiscalCode(), updated.getFiscalCode());
-    }
-
-    @Test
-    public void delete() {
-        String fiscalCode = "testFiscalCode";
-        String channel = "channel";
-        paymentInstrumentService.deleteByFiscalCode(fiscalCode, channel);
-
-        verify(restClientMock, only()).deleteByFiscalCode(eq(fiscalCode), eq(channel));
-        verify(restClientMock, times(1)).deleteByFiscalCode(eq(fiscalCode), eq(channel));
-    }
-
-    @Test
-    public void rollback() {
-        String fiscalCode = "testFiscalCode";
-        OffsetDateTime requestTimestamp = OffsetDateTime.now();
-        paymentInstrumentService.rollback(fiscalCode, requestTimestamp);
-
-        verify(restClientMock, only()).rollback(eq(fiscalCode), eq(requestTimestamp));
-        verify(restClientMock, times(1)).rollback(eq(fiscalCode), eq(requestTimestamp));
     }
 
 }

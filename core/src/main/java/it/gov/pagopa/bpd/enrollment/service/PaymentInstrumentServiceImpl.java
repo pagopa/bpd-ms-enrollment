@@ -2,12 +2,11 @@ package it.gov.pagopa.bpd.enrollment.service;
 
 import eu.sia.meda.service.BaseService;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.PaymentInstrumentRestClient;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.ChannelValidationResource;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.OffsetDateTime;
 
 /**
  * @see it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService
@@ -16,7 +15,6 @@ import java.time.OffsetDateTime;
 class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrumentService {
 
     private final PaymentInstrumentRestClient restClient;
-
 
     @Autowired
     public PaymentInstrumentServiceImpl(PaymentInstrumentRestClient restClient) {
@@ -34,13 +32,8 @@ class PaymentInstrumentServiceImpl extends BaseService implements PaymentInstrum
     }
 
     @Override
-    public void deleteByFiscalCode(String fiscalCode, String channel) {
-        restClient.deleteByFiscalCode(fiscalCode, channel);
-    }
-
-    @Override
-    public void rollback(String fiscalCode, OffsetDateTime requestTimestamp) {
-        restClient.rollback(fiscalCode, requestTimestamp);
+    public ChannelValidationResource validateChannel(String fiscalCode, String channel) {
+        return restClient.validateByFiscalCode(fiscalCode, channel);
     }
 
 }

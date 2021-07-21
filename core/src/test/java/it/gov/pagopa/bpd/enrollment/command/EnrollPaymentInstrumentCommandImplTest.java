@@ -2,9 +2,9 @@ package it.gov.pagopa.bpd.enrollment.command;
 
 import eu.sia.meda.async.util.AsyncUtils;
 import eu.sia.meda.core.model.ApplicationContext;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.ChannelValidationResource;
 import it.gov.pagopa.bpd.enrollment.service.CitizenService;
 import it.gov.pagopa.bpd.enrollment.service.PaymentInstrumentService;
-import it.gov.pagopa.bpd.enrollment.service.WinningTransactionService;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,8 +28,6 @@ public class EnrollPaymentInstrumentCommandImplTest {
     private CitizenService citizenService;
     @MockBean
     private PaymentInstrumentService paymentInstrumentService;
-    @MockBean
-    private WinningTransactionService winningTransactionService;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -43,9 +41,11 @@ public class EnrollPaymentInstrumentCommandImplTest {
     @Test
     public void doExecuteOK() throws ExecutionException, InterruptedException {
 
+        ChannelValidationResource channelValidationResource = new ChannelValidationResource();
+        channelValidationResource.setIsValid(true);
+
         BDDMockito.doNothing().when(citizenService).delete(Mockito.eq(FISCAL_CODE));
-        BDDMockito.doNothing().when(paymentInstrumentService).deleteByFiscalCode(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
-        BDDMockito.doNothing().when(winningTransactionService).deleteByFiscalCode(Mockito.eq(FISCAL_CODE));
+        BDDMockito.doReturn(channelValidationResource).when(paymentInstrumentService).validateChannel(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
 
         DeleteEnrolledCitizenCommandImpl deleteEnrolledCitizenCommand =
                 beanFactory.getBean(DeleteEnrolledCitizenCommandImpl.class, FISCAL_CODE, CHANNEL);
@@ -54,18 +54,20 @@ public class EnrollPaymentInstrumentCommandImplTest {
 
         BDDMockito.verify(citizenService, Mockito.times(1)).delete(Mockito.eq(FISCAL_CODE));
         BDDMockito.verify(paymentInstrumentService, Mockito.times(1))
-                .deleteByFiscalCode(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
-        BDDMockito.verify(winningTransactionService, Mockito.times(1)).deleteByFiscalCode(Mockito.eq(FISCAL_CODE));
+                .validateChannel(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
 
     }
 
     @Test
     public void doExecute_CitizenKO() throws ExecutionException, InterruptedException {
 
+        ChannelValidationResource channelValidationResource = new ChannelValidationResource();
+        channelValidationResource.setIsValid(true);
+
         BDDMockito.doAnswer(invocationOnMock -> {
             throw new Exception();
         }).when(citizenService).delete(Mockito.eq(FISCAL_CODE));
-        BDDMockito.doNothing().when(paymentInstrumentService).deleteByFiscalCode(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
+        BDDMockito.doReturn(channelValidationResource).when(paymentInstrumentService).validateChannel(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
 
         DeleteEnrolledCitizenCommandImpl deleteEnrolledCitizenCommand =
                 beanFactory.getBean(DeleteEnrolledCitizenCommandImpl.class, FISCAL_CODE, CHANNEL);
@@ -82,7 +84,7 @@ public class EnrollPaymentInstrumentCommandImplTest {
         BDDMockito.doNothing().when(citizenService).delete(Mockito.eq(FISCAL_CODE));
         BDDMockito.doAnswer(invocationOnMock -> {
             throw new Exception();
-        }).when(paymentInstrumentService).deleteByFiscalCode(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
+        }).when(paymentInstrumentService).validateChannel(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
 
         DeleteEnrolledCitizenCommandImpl deleteEnrolledCitizenCommand =
                 beanFactory.getBean(DeleteEnrolledCitizenCommandImpl.class, FISCAL_CODE, CHANNEL);
@@ -92,7 +94,7 @@ public class EnrollPaymentInstrumentCommandImplTest {
         deleteEnrolledCitizenCommand.doExecute();
 
         BDDMockito.verify(paymentInstrumentService, Mockito.times(1))
-                .deleteByFiscalCode(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
+                .validateChannel(Mockito.eq(FISCAL_CODE), Mockito.eq(CHANNEL));
 
     }
 
@@ -102,7 +104,6 @@ public class EnrollPaymentInstrumentCommandImplTest {
         BDDMockito.doAnswer(invocationOnMock -> {
             throw new Exception();
         }).when(citizenService).delete(Mockito.eq(FISCAL_CODE));
-        BDDMockito.doNothing().when(winningTransactionService).deleteByFiscalCode(Mockito.eq(FISCAL_CODE));
 
         DeleteEnrolledCitizenCommandImpl deleteEnrolledCitizenCommand =
                 beanFactory.getBean(DeleteEnrolledCitizenCommandImpl.class, FISCAL_CODE, CHANNEL);
@@ -111,7 +112,6 @@ public class EnrollPaymentInstrumentCommandImplTest {
         expectedException.expect(Exception.class);
         deleteEnrolledCitizenCommand.doExecute();
 
-        BDDMockito.verify(winningTransactionService, Mockito.times(1)).deleteByFiscalCode(Mockito.eq(FISCAL_CODE));
     }
 
 }

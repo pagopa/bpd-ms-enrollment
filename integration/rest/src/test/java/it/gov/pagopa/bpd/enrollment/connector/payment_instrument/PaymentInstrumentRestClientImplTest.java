@@ -63,13 +63,8 @@ public class PaymentInstrumentRestClientImplTest extends BaseFeignRestClientTest
 //    }
 
     @Test
-    public void deleteByFiscalCode() {
-        restClient.deleteByFiscalCode("test", "channel");
-    }
-
-    @Test
-    public void rollback() {
-        restClient.rollback("test", OffsetDateTime.now());
+    public void testValidate() {
+        restClient.validateByFiscalCode("test", "channel");
     }
 
 

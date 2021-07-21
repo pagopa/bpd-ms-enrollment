@@ -1,12 +1,15 @@
 {
   "request": {
-    "method": "DELETE",
-    "urlPathPattern": "/bpd/payment-instruments/fiscal-code/(\\w*)/(\\w*)"
+    "method": "POST",
+    "urlPathPattern": "/bpd/payment-instruments/fiscal-code/(\\w*)/(\\w*)/validate"
   },
   "response": {
     "status": "204",
     "headers": {
       "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "isChannelValid": "true"
     },
     "transformers": [
       "response-template"

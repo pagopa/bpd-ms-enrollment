@@ -4,9 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import it.gov.pagopa.bpd.common.annotation.UpperCase;
 import it.gov.pagopa.bpd.common.util.Constants;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
-import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenResource;
-import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentCitizenResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentResource;
@@ -28,7 +25,7 @@ import javax.validation.constraints.Size;
 @Validated
 public interface BpdEnrollmentController {
 
-    @PutMapping(value = "enrollment/io/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/io/citizens/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     EnrollmentCitizenResource enrollCitizenIO(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
@@ -37,7 +34,7 @@ public interface BpdEnrollmentController {
                     String fiscalCode);
 
 
-    @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     EnrollmentPaymentInstrumentResource enrollPaymentInstrumentIO(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
@@ -47,7 +44,7 @@ public interface BpdEnrollmentController {
             @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
 
-    @PutMapping(value = "enrollment/hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     EnrollmentCitizenResource enrollCitizenHB(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
@@ -57,7 +54,7 @@ public interface BpdEnrollmentController {
     );
 
 
-    @PutMapping(value = "enrollment/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "enrollment/hb/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     EnrollmentPaymentInstrumentResource enrollPaymentInstrumentHB(
             @ApiParam(value = "${swagger.enrollment.hashPan}", required = true)
@@ -66,7 +63,7 @@ public interface BpdEnrollmentController {
                     String hashPan,
             @RequestBody @Valid EnrollmentPaymentInstrumentDto request) throws Exception;
 
-    @DeleteMapping(value = "citizen/{id}/{channel}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "citizen/{id}/{channel}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteCitizen(
             @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)

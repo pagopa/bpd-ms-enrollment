@@ -4,16 +4,16 @@
 
     <parent>
         <groupId>it.gov.pagopa.bpd.ms</groupId>
-        <version>cen-383-rc2</version>
+        <version>2.0.0</version>
         <artifactId>bpd-ms-starter-parent</artifactId>
     </parent>
 
     <artifactId>bpd-ms-enrollment</artifactId>
-    <version>cen-383-rc3</version>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
 
     <properties>
-        <bpd-commons.version>cen-383-rc2</bpd-commons.version>
+        <bpd-commons.version>2.0.0</bpd-commons.version>
     </properties>
 
     <dependencyManagement>
@@ -21,17 +21,17 @@
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment.integration</groupId>
                 <artifactId>bpd-ms-enrollment-integration-rest</artifactId>
-                <version>cen-383-rc3</version>
+                <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment</groupId>
                 <artifactId>bpd-ms-enrollment-core</artifactId>
-                <version>cen-383-rc3</version>
+                <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.ms.enrollment.api</groupId>
                 <artifactId>bpd-ms-enrollment-api-rest</artifactId>
-                <version>cen-383-rc3</version>
+                <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>it.gov.pagopa.bpd.commons</groupId>

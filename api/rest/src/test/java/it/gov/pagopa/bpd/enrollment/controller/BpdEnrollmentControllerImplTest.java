@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -46,7 +46,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = {BpdEnrollmentControllerImpl.class}, excludeAutoConfiguration = MockMvcSecurityAutoConfiguration.class)
+@WebMvcTest(value = {BpdEnrollmentControllerImpl.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @ContextConfiguration(classes = {
         BpdEnrollmentControllerImpl.class,
         DummyConfiguration.class,
@@ -103,8 +103,8 @@ public class BpdEnrollmentControllerImplTest {
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPan)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
@@ -131,8 +131,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPanValue)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn();
@@ -151,8 +151,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/payment-instruments/" + hashPan)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
@@ -179,8 +179,8 @@ public class BpdEnrollmentControllerImplTest {
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/payment-instruments/" + hashPan)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
@@ -206,8 +206,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/payment-instruments/" + hashPan)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn();
@@ -227,8 +227,8 @@ public class BpdEnrollmentControllerImplTest {
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
@@ -248,8 +248,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/io/citizens/" + fiscalCode)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
 
@@ -270,8 +270,8 @@ public class BpdEnrollmentControllerImplTest {
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/citizens/" + fiscalCode)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
         CitizenResource result =
@@ -294,8 +294,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .put(URL_TEMPLATE_PREFIX + "/hb/citizens/" + fiscalCode)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
@@ -314,8 +314,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .delete("/bpd/citizen/" + fiscalCode + "/" + channel)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
 
@@ -334,8 +334,8 @@ public class BpdEnrollmentControllerImplTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .delete("/bpd/citizen/" + fiscalCode + "/" + channel)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError())
                 .andReturn();
 

@@ -234,8 +234,8 @@ public class BpdEnrollmentControllerImplTest {
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).enroll(eq(fiscalCode), null);
-        verify(citizenService, times(1)).enroll(eq(fiscalCode), null);
+        verify(citizenService, only()).enroll(eq(fiscalCode), any());
+        verify(citizenService, times(1)).enroll(eq(fiscalCode), any());
         BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
@@ -277,8 +277,8 @@ public class BpdEnrollmentControllerImplTest {
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).enroll(eq(fiscalCode), null);
-        verify(citizenService, times(1)).enroll(eq(fiscalCode), null);
+        verify(citizenService, only()).enroll(eq(fiscalCode), any());
+        verify(citizenService, times(1)).enroll(eq(fiscalCode), any());
         BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
 
         assertNotNull(result);

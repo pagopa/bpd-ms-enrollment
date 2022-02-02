@@ -39,6 +39,7 @@ variables:
   #isToDeploy: $[and(ne(variables['Build.Reason'], 'PullRequest'), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix')))]
 
   # JUST FOR TEST IN UAT
+  isToDeploy: true
   environment: 'UAT'
   dockerRegistryServiceConnection: '$(UAT_CONTAINER_REGISTRY_SERVICE_CONN)'
   kubernetesServiceConnection: '$(UAT_KUBERNETES_SERVICE_CONN)'

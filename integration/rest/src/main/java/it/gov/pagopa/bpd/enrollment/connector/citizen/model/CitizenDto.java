@@ -14,4 +14,12 @@ public class CitizenDto {
     @NotNull
     private OffsetDateTime timestampTC;
 
+    private OptInStatus optInStatus;
+
+    public enum OptInStatus {
+        NOREQ,
+        ACCEPTED,
+        DENIED
+    } 
+
 }

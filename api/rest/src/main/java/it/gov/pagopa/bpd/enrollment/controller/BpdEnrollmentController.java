@@ -28,10 +28,14 @@ public interface BpdEnrollmentController {
     @PutMapping(value = "enrollment/io/citizens/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     EnrollmentCitizenResource enrollCitizenIO(
-            @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
-            @PathVariable("id") @UpperCase
-            @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode);
+        @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
+        @PathVariable("id") @UpperCase @NotBlank @Size(min = 16, max = 16) 
+        @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
+        String fiscalCode,
+        
+        @RequestBody(required=false) @Valid 
+        EnrollmentCitizenDto citizen        
+        );
 
 
     @PutMapping(value = "enrollment/io/payment-instruments/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,10 +51,10 @@ public interface BpdEnrollmentController {
     @PutMapping(value = "enrollment/hb/citizens/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     EnrollmentCitizenResource enrollCitizenHB(
-            @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
-            @PathVariable("id") @UpperCase
-            @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
-                    String fiscalCode
+        @ApiParam(value = "${swagger.enrollment.fiscalCode}", required = true)
+        @PathVariable("id") @UpperCase
+        @NotBlank @Size(min = 16, max = 16) @Pattern(regexp = Constants.FISCAL_CODE_REGEX)
+        String fiscalCode
     );
 
 

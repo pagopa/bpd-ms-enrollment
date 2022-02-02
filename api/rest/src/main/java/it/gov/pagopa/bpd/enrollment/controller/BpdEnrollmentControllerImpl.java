@@ -6,6 +6,8 @@ import it.gov.pagopa.bpd.enrollment.assembler.CitizenResourceAssembler;
 import it.gov.pagopa.bpd.enrollment.assembler.PaymentInstrumentResourceAssembler;
 import it.gov.pagopa.bpd.enrollment.command.DeleteEnrolledCitizenCommand;
 import it.gov.pagopa.bpd.enrollment.command.EnrollPaymentInstrumentCommand;
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
+import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.EnrollmentCitizenDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.connector.payment_instrument.model.PaymentInstrumentResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentCitizenResource;
@@ -42,13 +44,17 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
 
 
     @Override
-    public EnrollmentCitizenResource enrollCitizenIO(String fiscalCode) {
+    public EnrollmentCitizenResource enrollCitizenIO(String fiscalCode, EnrollmentCitizenDto citizen) {
         if (logger.isDebugEnabled()) {
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenIO");
             logger.debug(String.format("fiscalCode = %s", fiscalCode));
         }
+        CitizenDto.OptInStatus status = null;
+        if (citizen) { // payload is optional
+            status = citizen.getOptInStatus()
+        }
 
-        return citizenResourceAssembler.toResource(citizenService.enroll(fiscalCode));
+        return citizenResourceAssembler.toResource(citizenService.enroll(fiscalCode, status));
     }
 
 
@@ -73,8 +79,7 @@ class BpdEnrollmentControllerImpl extends StatelessController implements BpdEnro
             logger.debug("BpdEnrollmentControllerImpl.enrollCitizenHB");
             logger.debug(String.format("fiscalCode = [%s]", fiscalCode));
         }
-
-        return citizenResourceAssembler.toResource(citizenService.enroll(fiscalCode));
+        return citizenResourceAssembler.toResource(citizenService.enroll(fiscalCode, null));
     }
 
 

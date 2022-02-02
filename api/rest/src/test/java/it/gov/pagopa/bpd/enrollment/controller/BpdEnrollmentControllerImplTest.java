@@ -218,7 +218,7 @@ public class BpdEnrollmentControllerImplTest {
     public void enrollCitizenIO_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
 
-        when(citizenService.enroll(anyString()))
+        when(citizenService.enroll(anyString(), any()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
@@ -234,8 +234,8 @@ public class BpdEnrollmentControllerImplTest {
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).enroll(eq(fiscalCode));
-        verify(citizenService, times(1)).enroll(eq(fiscalCode));
+        verify(citizenService, only()).enroll(eq(fiscalCode), null);
+        verify(citizenService, times(1)).enroll(eq(fiscalCode), null);
         BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
         assertNotNull(result);
         assertEquals(fiscalCode, result.getFiscalCode());
@@ -261,7 +261,7 @@ public class BpdEnrollmentControllerImplTest {
     public void enrollCitizenHB_OK() throws Exception {
         final String fiscalCode = "DHFIVD85M84D048L";
 
-        when(citizenService.enroll(anyString()))
+        when(citizenService.enroll(anyString(), any()))
                 .thenAnswer(invocation -> {
                     CitizenResource result = new CitizenResource();
                     result.setFiscalCode(invocation.getArgument(0));
@@ -277,8 +277,8 @@ public class BpdEnrollmentControllerImplTest {
         CitizenResource result =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CitizenResource.class);
 
-        verify(citizenService, only()).enroll(eq(fiscalCode));
-        verify(citizenService, times(1)).enroll(eq(fiscalCode));
+        verify(citizenService, only()).enroll(eq(fiscalCode), null);
+        verify(citizenService, times(1)).enroll(eq(fiscalCode), null);
         BDDMockito.verify(citizenResourceAssembler).toResource(Mockito.any(CitizenResource.class));
 
         assertNotNull(result);

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import it.gov.pagopa.bpd.common.annotation.UpperCase;
 import it.gov.pagopa.bpd.common.util.Constants;
+import it.gov.pagopa.bpd.enrollment.model.EnrollmentCitizenDto;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentCitizenResource;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentDto;
 import it.gov.pagopa.bpd.enrollment.model.EnrollmentPaymentInstrumentResource;

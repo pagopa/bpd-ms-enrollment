@@ -1,5 +1,7 @@
 package it.gov.pagopa.bpd.enrollment.model;
 
+import it.gov.pagopa.bpd.enrollment.connector.citizen.model.CitizenDto;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -26,4 +28,6 @@ public class EnrollmentCitizenResource {
     @ApiModelProperty(value = "${swagger.enrollment.enabled}", required = true)
     private boolean enabled;
 
+    @ApiModelProperty(value = "${swagger.enrollment.optInStatus}", required = false)
+    private CitizenDto.OptInStatus optInStatus;
 }

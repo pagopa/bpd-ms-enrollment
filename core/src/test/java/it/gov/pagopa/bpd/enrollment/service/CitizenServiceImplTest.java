@@ -71,7 +71,7 @@ public class CitizenServiceImplTest {
     public void enroll() {
         String fiscalCode = RandomStringUtils.randomAlphanumeric(16);
 
-        final CitizenResource result = citizenService.enroll(fiscalCode);
+        final CitizenResource result = citizenService.enroll(fiscalCode, null);
 
         verify(restClientMock, only()).update(eq(fiscalCode), Mockito.any(CitizenDto.class));
         verify(restClientMock, times(1)).update(eq(fiscalCode), Mockito.any(CitizenDto.class));

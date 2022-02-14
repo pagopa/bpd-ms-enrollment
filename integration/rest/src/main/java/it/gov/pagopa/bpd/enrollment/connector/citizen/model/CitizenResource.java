@@ -18,5 +18,6 @@ public class CitizenResource {
     private String payoffInstrType;
     private OffsetDateTime timestampTC;
     private boolean enabled;
+    private CitizenDto.OptInStatus optInStatus;
 
 }
